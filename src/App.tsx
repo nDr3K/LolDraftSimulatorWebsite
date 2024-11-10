@@ -1,11 +1,12 @@
-import { ThemeProvider } from "@/components/theme-provider"
+import { ThemeProvider } from "@/components/features/Menu/theme-provider"
 import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
 import './App.css'
-import MenuBar from "./components/menu-bar"
+import MenuBar from "./components/features/Menu/menu-bar"
 import Home from "./pages/Home/Home";
+import Draft from "./pages/Draft/Draft";
 
 const router = createBrowserRouter([
   {
@@ -30,7 +31,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/draft",
-        element: <div>DRAFT</div>,
+        element: <Draft />,
       }
     ],
     errorElement: <div>404 - Page Not Found</div>
