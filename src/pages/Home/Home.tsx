@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import OptionsAccordion from "@/components/options-accordion";
 
 export default function Home() {
   return (
@@ -13,7 +14,7 @@ export default function Home() {
               <CardDescription>Perfect your strategy, solo.</CardDescription>
             </CardHeader>
             <CardContent className="text-center">
-              <p className="relative z-10">Explore champion combos, draft solo, and refine your tactics at your own pace. Play offline and push your skills to the next level.</p>
+              <p className="relative z-10">Explore champion combos, draft solo, and refine your tactics at your own pace. Play offline without time limits.</p>
             </CardContent>
           </Card>
         </Link>
@@ -29,6 +30,7 @@ export default function Home() {
           </Card>
         </Link>
       </div>
+      <OptionsAccordion />
     </div>
   )
 }
