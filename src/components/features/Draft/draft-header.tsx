@@ -6,7 +6,7 @@ export default function DraftHeader({
 
     return(
       <div className="flex justify-between items-center mb-4">
-        <div className="bg-blue-700 text-white px-4 py-2 w-[25%] text-center text-2xl font-bold">
+        <div className="bg-blue-700 text-white px-4 py-2 w-[20%] text-center text-2xl font-bold rounded-md">
           {blueTeamName}
         </div>
 
@@ -16,7 +16,7 @@ export default function DraftHeader({
           </div>
         </div>
 
-        <div className="bg-red-700 text-white px-4 py-2 w-[25%] text-center text-2xl font-bold">
+        <div className="bg-red-700 text-white px-4 py-2 w-[20%] text-center text-2xl font-bold rounded-md">
           {redTeamName}
         </div>
       </div>
