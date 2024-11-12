@@ -1,3 +1,4 @@
+import DraftHeader from '@/components/features/Draft/draft-header';
 import { useLocation } from 'react-router-dom';
 
 export default function Draft() {
@@ -9,6 +10,7 @@ export default function Draft() {
   
   return(
     <>
+    <DraftHeader blueTeamName='Blue' redTeamName='Red' timer={30}/>
     </>
   )
 }
