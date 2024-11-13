@@ -1,5 +1,5 @@
 import { DraftChampion } from "@/types/draft-champion";
-import {DraftSide} from "@/types/draft-side";
+import { DraftSide } from "@/types/draft-side";
 import classNames from "classnames";
 
 export default function DraftPick({champion = null, side = 'blue'}: {champion: DraftChampion | null, side: DraftSide}) {
