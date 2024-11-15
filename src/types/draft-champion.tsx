@@ -1,4 +1,5 @@
 export type DraftChampion = {
-    id: string | null;
-    status: 'hover' | 'selected';
+    id: string;
+    name: string;
+    status: 'hover' | 'selected' | 'none';
 }
