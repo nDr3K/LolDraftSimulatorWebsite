@@ -1,10 +1,11 @@
-import {DraftChampion} from "@/types/draft-champion";
+import { DraftChampion } from "@/types/draft-champion";
 
 export default function DraftGrid({
-    champions = []
-}: {champions: Array<DraftChampion>}) {
+    champions = [],
+    version = ''
+}: {champions: Array<DraftChampion>, version: string}) {
     return (
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-2 overflow-y-auto h-full">
         {champions.map((champion) => champion.id && (
           <div
             key={champion.id}
@@ -14,7 +15,7 @@ export default function DraftGrid({
               <img
                 src={champion.id == 'none' 
                   ? 'src/assets/placeholder.png' 
-                  : `https://ddragon.leagueoflegends.com/cdn/14.22.1/img/champion/${champion.id}.png`
+                  : `https://ddragon.leagueoflegends.com/cdn/${version}/img/champion/${champion.id}.png`
                 }
                 alt={champion.name}
                 className="w-24 h-24 object-cover object-center"
