@@ -76,12 +76,19 @@ export default function Draft() {
       <DraftHeader blueTeamName='Blue' redTeamName='Red' timer={30}/>
       <div className="flex justify-between items-stretch space-x-4 p-4 h-[40rem]">
         <DraftTeam team={[null,null,null,null,null]} side='blue' />
-        <div className="flex-1 overflow-hidden">
-          <DraftSelection onRoleSelect={handleRoleSelect} onSearchChange={handleSearchChange} />
-          {isLoading
-            ? <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"></div>
-            : <DraftGrid champions={champions} version={version} filter={filter} />
-          }
+        <div className="flex-1 flex flex-col overflow-hidden">
+          <div className="flex-shrink-0">
+            <DraftSelection onRoleSelect={handleRoleSelect} onSearchChange={handleSearchChange} />
+          </div>
+          <div className="flex-1 overflow-y-auto">
+            {isLoading ? (
+              <div className="flex justify-center items-center h-full">
+                <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"></div>
+              </div>
+            ) : (
+              <DraftGrid champions={champions} version={version} filter={filter} />
+            )}
+          </div>
         </div>
         <DraftTeam team={[null,null,null,null,null]} side='red' />
       </div>
