@@ -1,5 +1,6 @@
 import DraftGrid from '@/components/features/Draft/draft-grid';
 import DraftHeader from '@/components/features/Draft/draft-header';
+import DraftSelection from '@/components/features/Draft/draft-selection';
 import DraftTeam from '@/components/features/Draft/draft-team';
 import { DataChampion } from '@/types/datadragon-champion';
 import { DraftChampion } from '@/types/draft-champion';
@@ -82,6 +83,7 @@ export default function Draft() {
       <div className="flex justify-between items-stretch space-x-4 p-4 h-[40rem]">
         <DraftTeam team={[null,null,null,null,null]} side='blue' />
         <div className="flex-1 overflow-hidden">
+          <DraftSelection />
           {!isLoading &&
             <DraftGrid champions={champions} version={version} />
           }
