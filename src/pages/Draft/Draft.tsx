@@ -4,6 +4,7 @@ import DraftSelection from '@/components/features/Draft/draft-selection';
 import DraftTeam from '@/components/features/Draft/draft-team';
 import { DataChampion } from '@/types/datadragon-champion';
 import { DraftChampion } from '@/types/draft-champion';
+import { Role } from '@/types/role';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
@@ -13,7 +14,18 @@ export default function Draft() {
   const [version, setVersion] = useState('');
   const [champions, setChampions] = useState<Array<DraftChampion>>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [filter, setFilter] = useState<{ role: Role | null; search: string }>({
+    role: null,
+    search: '',
+  });
+
+  const handleRoleSelect = (role: Role | null) => {
+    setFilter((prev) => ({ ...prev, role }));
+  };
+
+  const handleSearchChange = (search: string) => {
+    setFilter((prev) => ({ ...prev, search }));
+  };
 
   console.log('Draft Mode:', mode);
   console.log('Options:', { isFearless, banPick, keepBan });
@@ -22,7 +34,6 @@ export default function Draft() {
     const fetchChampions = async () => {
       try {
         setIsLoading(true);
-        setError(null);
 
         const versionsResponse = await fetch('https://ddragon.leagueoflegends.com/api/versions.json');
         if (!versionsResponse.ok) {
@@ -44,13 +55,13 @@ export default function Draft() {
           (champion: DataChampion) => ({
             id: champion.id,
             name: champion.name,
+            role: [],
             status: 'none'
           })
         );
 
         setChampions(transformedChampions);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'An error occurred while fetching data');
         console.error('Error fetching champion data:', err);
       } finally {
         setIsLoading(false);
@@ -60,32 +71,16 @@ export default function Draft() {
     fetchChampions();
   }, []);
 
-
-  if (error) {
-    return (
-      <div className="min-h-screen flex items-center justify-center text-red-500">
-        <p>Error: {error}</p>
-      </div>
-    );
-  }
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"></div>
-      </div>
-    );
-  }
-  
   return(
     <>
       <DraftHeader blueTeamName='Blue' redTeamName='Red' timer={30}/>
       <div className="flex justify-between items-stretch space-x-4 p-4 h-[40rem]">
         <DraftTeam team={[null,null,null,null,null]} side='blue' />
         <div className="flex-1 overflow-hidden">
-          <DraftSelection />
-          {!isLoading &&
-            <DraftGrid champions={champions} version={version} />
+          <DraftSelection onRoleSelect={handleRoleSelect} onSearchChange={handleSearchChange} />
+          {isLoading
+            ? <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"></div>
+            : <DraftGrid champions={champions} version={version} filter={filter} />
           }
         </div>
         <DraftTeam team={[null,null,null,null,null]} side='red' />

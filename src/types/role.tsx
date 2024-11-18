@@ -1,0 +1,1 @@
+export type Role = 'top' | 'jungle' | 'mid' | 'bot' | 'support';
