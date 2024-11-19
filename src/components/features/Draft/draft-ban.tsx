@@ -6,8 +6,9 @@ export default function DraftBan({
 }: {bans: Array<string | null>, version: string}) {
   return(
     <div className='flex gap-2 m-4 mt-0'>
-      {bans.map(ban => 
+      {bans.map((ban, index) => 
         <img
+          key={index}
           className={classNames('w-14 h-14',
             {
               'object-cover': ban == null

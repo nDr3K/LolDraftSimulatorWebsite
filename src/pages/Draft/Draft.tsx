@@ -11,7 +11,7 @@ import { useLocation } from 'react-router-dom';
 
 export default function Draft() {
   const location = useLocation();
-  const { mode, isFearless, banPick, keepBan } = location.state || {};
+  const { mode, isFearless, banPick, keepBan, tournamentBan } = location.state || {};
   const [version, setVersion] = useState('');
   const [champions, setChampions] = useState<Array<DraftChampion>>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -29,7 +29,7 @@ export default function Draft() {
   };
 
   console.log('Draft Mode:', mode);
-  console.log('Options:', { isFearless, banPick, keepBan });
+  console.log('Options:', { isFearless, banPick, keepBan, tournamentBan });
 
   useEffect(() => {
     const fetchChampions = async () => {
