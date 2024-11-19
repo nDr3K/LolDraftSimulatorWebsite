@@ -74,10 +74,10 @@ export default function Draft() {
 
   return(
     <>
-      <DraftHeader blueTeamName='Blue' redTeamName='Red' timer={30}/>
+      <DraftHeader blueTeamName='Blue' redTeamName='Red' timer={30} />
       <div className="flex justify-between items-stretch space-x-4 p-4 h-[44rem]">
         <div>
-          <DraftBan bans={[null,null,null,null,null]} version={version}/>
+          <DraftBan bans={[null,null,null,null,null]} version={version} side='blue' />
           <DraftTeam team={[null,null,null,null,null]} side='blue' />
         </div>
         <div className="flex-1 flex flex-col overflow-hidden">
@@ -95,7 +95,7 @@ export default function Draft() {
           </div>
         </div>
         <div>
-          <DraftBan bans={[null,null,null,null,null]} version={version}/>
+          <DraftBan bans={[null,null,null,null,null]} version={version} side='red' />
           <DraftTeam team={[null,null,null,null,null]} side='red' />
         </div>
       </div>

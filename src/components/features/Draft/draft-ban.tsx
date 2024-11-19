@@ -1,11 +1,21 @@
+import {DraftSide} from "@/types/draft-side";
 import classNames from "classnames";
 
 export default function DraftBan({
     bans = [],
-    version = ''
-}: {bans: Array<string | null>, version: string}) {
+    version = '',
+    side
+}: {bans: Array<string | null>, version: string, side: DraftSide}) {
   return(
-    <div className='flex gap-2 m-4 mt-0'>
+    <div 
+      className={classNames(
+        'flex mb-4 mt-0 gap-2',
+        {
+          'justify-start': side === 'blue',
+          'justify-end': side === 'red',
+        }
+      )}
+    >
       {bans.map((ban, index) => 
         <img
           key={index}
