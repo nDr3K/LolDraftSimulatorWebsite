@@ -17,21 +17,33 @@ export default function DraftBan({
         }
       )}
     >
-      {displayedBans.map((ban, index) => 
-        <img
+      {displayedBans.map((ban, index) => (
+        <div
           key={index}
-          className={classNames('w-14 h-14',
-            {
-              'object-cover': ban == null
+          className="relative w-14 h-14"
+        >
+          <img
+            className="w-full h-full object-cover"
+            src={
+              ban == null
+                ? 'src/assets/placeholder.png'
+                : `https://ddragon.leagueoflegends.com/cdn/${version}/img/champion/${ban}.png`
             }
+            alt={ban || 'placeholder'}
+          />
+
+          {ban && (
+            <div className="absolute inset-0 bg-transparent">
+              <div
+                className="w-full h-full border-t-2 border-red-700 absolute"
+                style={{
+                  transform: 'rotate(-45deg) translate(0, 1.75rem)',
+                }}
+              ></div>
+            </div>
           )}
-          src={ban == null 
-            ? 'src/assets/placeholder.png' 
-            : `https://ddragon.leagueoflegends.com/cdn/${version}/img/champion/${ban}.png`
-          }
-          alt={ban || 'placeholder'}
-         />
-      )}
+        </div>
+      ))}
     </div>
   )
 }

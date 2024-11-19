@@ -95,7 +95,7 @@ export default function Draft() {
           </div>
         </div>
         <div>
-          <DraftBan bans={[null,null,null,null,null]} version={version} side='red' />
+          <DraftBan bans={['Ekko',null,null,null,null]} version={version} side='red' />
           <DraftTeam team={[null,null,null,null,null]} side='red' />
         </div>
       </div>
