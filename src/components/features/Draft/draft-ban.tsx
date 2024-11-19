@@ -1,4 +1,4 @@
-import {DraftSide} from "@/types/draft-side";
+import { DraftSide } from "@/types/draft-side";
 import classNames from "classnames";
 
 export default function DraftBan({
@@ -6,6 +6,7 @@ export default function DraftBan({
     version = '',
     side
 }: {bans: Array<string | null>, version: string, side: DraftSide}) {
+  const displayedBans = side === 'red' ? bans.toReversed() : bans;
   return(
     <div 
       className={classNames(
@@ -16,7 +17,7 @@ export default function DraftBan({
         }
       )}
     >
-      {bans.map((ban, index) => 
+      {displayedBans.map((ban, index) => 
         <img
           key={index}
           className={classNames('w-14 h-14',
