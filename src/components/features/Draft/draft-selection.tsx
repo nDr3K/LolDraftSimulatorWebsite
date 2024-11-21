@@ -1,5 +1,5 @@
 import { Role } from "@/types/role";
-import {useState} from "react";
+import { useState } from "react";
 
 export default function DraftSelection({
   onRoleSelect,
@@ -13,6 +13,7 @@ export default function DraftSelection({
 
   const handleRoleClick = (role: Role) => {
     const newRole = selectedRole === role ? null : role;
+    console.log(`role is: ${role} and selected is: ${selectedRole}`)
     setSelectedRole(newRole);
     onRoleSelect(newRole);
   };
@@ -24,10 +25,10 @@ export default function DraftSelection({
           <div
             key={role}
             onClick={() => handleRoleClick(role)}
-            className={`w-8 h-8 flex items-center justify-center brightness-75 transition duration-200 hover:cursor-pointer ${
+            className={`w-8 h-8 flex items-center justify-center transition duration-200 hover:cursor-pointer ${
               selectedRole === role
                 ? 'brightness-125 drop-shadow-lg'
-                : 'hover:brightness-125 hover:drop-shadow-lg'
+                : 'brightness-75 hover:brightness-125 hover:drop-shadow-lg'
             }`}
           >
             <img
