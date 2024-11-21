@@ -28,7 +28,7 @@ export default function Home() {
           onClick={() => handleCardClick('solo')} 
           className="group w-full sm:w-[calc(50%-12px)] max-w-md"
         >
-          <Card className="h-full transition-all duration-300 ease-in-out hover:border-primary hover:shadow-lg bg-gradient-to-br from-background to-background hover:from-primary/5 hover:to-background">
+          <Card className="h-full transition-all duration-300 ease-in-out hover:cursor-pointer hover:border-primary hover:shadow-lg bg-gradient-to-br from-background to-background hover:from-primary/5 hover:to-background">
             <CardHeader className="text-center">
               <CardTitle className="group-hover:text-primary transition-colors duration-300">Solo Draft</CardTitle>
               <CardDescription>Perfect your strategy, solo.</CardDescription>
@@ -42,7 +42,7 @@ export default function Home() {
           onClick={() => handleCardClick('multiplayer')} 
           className="cursor-pointer group w-full sm:w-[calc(50%-12px)] max-w-md"
         >
-          <Card className="h-full transition-all duration-300 ease-in-out hover:border-primary hover:shadow-lg bg-gradient-to-br from-background to-background hover:from-primary/5 hover:to-background">
+          <Card className="h-full transition-all duration-300 ease-in-out hover:cursor-pointer hover:border-primary hover:shadow-lg bg-gradient-to-br from-background to-background hover:from-primary/5 hover:to-background">
             <CardHeader className="text-center">
               <CardTitle className="group-hover:text-primary transition-colors duration-300">Multiplayer Draft</CardTitle>
               <CardDescription>Challenge your friends or foes.</CardDescription>
