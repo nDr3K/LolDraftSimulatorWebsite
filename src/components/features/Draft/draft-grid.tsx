@@ -16,7 +16,7 @@ export default function DraftGrid({
   });
 
   return (
-    <div className="flex flex-wrap gap-2 overflow-y-auto h-full">
+    <div className="flex flex-wrap gap-2 overflow-y-auto">
       {filteredChampions.map((champion) => champion.id && (
         <div
           key={champion.id}
