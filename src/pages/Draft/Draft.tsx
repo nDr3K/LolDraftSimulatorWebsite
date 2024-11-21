@@ -75,7 +75,7 @@ export default function Draft() {
   return(
     <>
       <DraftHeader blueTeamName='Blue' redTeamName='Red' timer={30} />
-      <div className="flex justify-between items-stretch space-x-4 p-4 h-[44rem]">
+      <div className="flex justify-between items-stretch space-x-4 p-4 h-[45rem]">
         <div>
           <DraftBan bans={[null,null,null,null,null]} version={version} side='blue' />
           <DraftTeam team={[null,null,null,null,null]} side='blue' />
