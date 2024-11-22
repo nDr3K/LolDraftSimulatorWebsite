@@ -1,4 +1,5 @@
 import DraftBan from '@/components/features/Draft/draft-ban';
+import DraftDisabled from '@/components/features/Draft/draft-disabled';
 import DraftGrid from '@/components/features/Draft/draft-grid';
 import DraftHeader from '@/components/features/Draft/draft-header';
 import DraftSelection from '@/components/features/Draft/draft-selection';
@@ -75,19 +76,19 @@ export default function Draft() {
   return(
     <>
       <DraftHeader blueTeamName='Blue' redTeamName='Red' timer={30} />
-      <div className="flex justify-between items-stretch space-x-4 p-4 h-[45rem]">
+      <div className='flex justify-between items-stretch space-x-4 p-4 h-[45rem]'>
         <div>
           <DraftBan bans={[null,null,null,null,null]} version={version} side='blue' />
           <DraftTeam team={[null,null,null,null,null]} side='blue' />
         </div>
-        <div className="flex-1 flex flex-col overflow-hidden">
-          <div className="flex-shrink-0 mb-2">
+        <div className='flex-1 flex flex-col overflow-hidden'>
+          <div className='flex-shrink-0 mb-2'>
             <DraftSelection onRoleSelect={handleRoleSelect} onSearchChange={handleSearchChange} />
           </div>
-          <div className="flex-1 overflow-y-auto">
+          <div className='flex-1 overflow-y-auto'>
             {isLoading ? (
-              <div className="flex justify-center items-center h-full">
-                <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"></div>
+              <div className='flex justify-center items-center h-full'>
+                <div className='animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent'></div>
               </div>
             ) : (
               <DraftGrid champions={champions} version={version} filter={filter} />
@@ -98,6 +99,14 @@ export default function Draft() {
           <DraftBan bans={[null,null,null,null,null]} version={version} side='red' />
           <DraftTeam team={[null,null,null,null,null]} side='red' />
         </div>
+      </div>
+      <div className='flex justify-between px-4 mt-2'>
+        <DraftDisabled bans={[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]} version={version} side='blue' />
+        <DraftDisabled bans={[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]} version={version} side='red' />
+      </div>
+      <div className='flex justify-between px-4'>
+        <DraftDisabled bans={[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]} version={version} side='blue' />
+        <DraftDisabled bans={[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]} version={version} side='red' />
       </div>
     </>
   )

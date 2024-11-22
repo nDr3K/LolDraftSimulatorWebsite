@@ -13,7 +13,6 @@ export default function DraftSelection({
 
   const handleRoleClick = (role: Role) => {
     const newRole = selectedRole === role ? null : role;
-    console.log(`role is: ${role} and selected is: ${selectedRole}`)
     setSelectedRole(newRole);
     onRoleSelect(newRole);
   };
