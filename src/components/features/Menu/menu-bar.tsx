@@ -8,7 +8,7 @@ export default function MenuBar({ isLoggedIn = false, userEmail = '' }: { isLogg
   return (
     <>
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="flex h-14 items-center">
+        <div className="flex h-10 items-center">
           <div className="mr-4 hidden md:flex">
             <Link to={`/`} className="mr-6 flex items-center space-x-2">
               <span className="hidden font-bold sm:inline-block">MyApp</span>
@@ -19,7 +19,7 @@ export default function MenuBar({ isLoggedIn = false, userEmail = '' }: { isLogg
               {isLoggedIn ? (
                 <AvatarDropDown userEmail={userEmail} />
               ) : (
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-2 mb-2">
                   <Button variant="ghost" asChild>
                     <Link to={`login`}>Log In</Link>
                   </Button>
@@ -33,7 +33,7 @@ export default function MenuBar({ isLoggedIn = false, userEmail = '' }: { isLogg
           </div>
         </div>
       </header>
-      <div className="mt-10">
+      <div className="mt-4">
         <Outlet />
       </div>
     </>

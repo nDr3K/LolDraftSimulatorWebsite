@@ -21,7 +21,7 @@ export default function Home() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 pt-8">
       <h1 className="text-4xl font-bold text-center mb-8">Choose Your Draft Mode</h1>
       <div className="flex flex-wrap justify-center gap-6">
         <div 
