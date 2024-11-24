@@ -2,6 +2,7 @@ import { DraftSide } from "@/types/draft-side";
 import { DraftState } from "./model/draft-state";
 import { DraftEvent } from "./types/draft-event";
 import { DraftService } from "./draft.service";
+import { DraftChampion } from "@/types/draft-champion";
 
 export class SoloDraftService implements DraftService {
     private draftState: DraftState;
@@ -29,65 +30,64 @@ export class SoloDraftService implements DraftService {
         case 'MESSAGE':
           //no chat for offline
           break;
-        case 'HOVER': 
-        this.draftState = {
-          ...this.draftState,
-          hover: event.payload
-        };
-        break;
+        case 'HOVER':
+          if (this.draftState.phase == 'pick')
+            this.handleHoverEvent(event);
+          break;
         case 'SELECT':
-          this.turnCounter++;
           this.handleSelectEvent(event);
           break;
       }
   
       this.notifySubscribers(this.draftState);
     }
+
+    private handleHoverEvent(event: DraftEvent) {
+      const { teamKey } = this.determineTeam(event.user);
+      const hoverChampion: DraftChampion = { ...event.payload, status: 'hover' };
+  
+      const updated = this.updateStateArray<DraftChampion>(
+        teamKey,
+        'picks',
+        hoverChampion,
+        item => item?.status === 'hover'
+      ) || this.updateStateArray<DraftChampion>(
+        teamKey,
+        'picks',
+        hoverChampion,
+        item => item === null
+      );
+  
+      if (!updated) {
+        console.warn('No available slot found for hover');
+      }
+    }
   
     private handleSelectEvent(event: DraftEvent) {
-      const team: DraftSide = event.user === this.draftState.blueTeam.name ? 'blue' : 'red';
+      const { teamKey } = this.determineTeam(event.user);
       const isBanPhase = this.draftState.phase === 'ban';
-    
-      const updateTeamState = (teamKey: 'blueTeam' | 'redTeam', field: 'bans' | 'picks') => {
-        const currentArray = this.draftState[teamKey][field];
-        const nullIndex = currentArray.findIndex(item => item === null);
-        
-        if (nullIndex === -1) {
-          return; // or handle the case where there are no null elements
-        }
-      
-        this.draftState = {
-          ...this.draftState,
-          [teamKey]: {
-            ...this.draftState[teamKey],
-            [field]: currentArray.map((item, index) => 
-              index === nullIndex ? event.payload : item
-            ),
-          },
-        };
-      };
-    
-      updateTeamState(
-        team === 'blue' ? 'blueTeam' : 'redTeam', 
-        isBanPhase ? 'bans' : 'picks'
-      );
-
-      let phase: 'ban' | 'pick' | 'ready';
-      if (this.turnCounter <= 6) {
-        phase = 'ban';
-      } else if (this.turnCounter <= 12) {
-        phase = 'pick';
-      } else if (this.turnCounter <= 16) {
-        phase = 'ban';
-      } else {
-        phase = 'pick'
+      const field = isBanPhase ? 'bans' : 'picks';
+  
+      const updated = isBanPhase 
+        ? this.updateStateArray<string>(
+            teamKey,
+            field,
+            event.payload.id,
+            (v: string | null) => v === null
+          )
+        : this.updateStateArray<DraftChampion>(
+            teamKey,
+            field,
+            event.payload,
+            (v: DraftChampion | null) => v?.status === 'hover'
+          );
+  
+      if (!updated) {
+        console.warn('No available slot found for selection');
+        return;
       }
-    
-      this.draftState = {
-        ...this.draftState,
-        phase: phase,
-        turn: this.getTurn(),
-      };
+      this.turnCounter++;
+      this.updatePhaseAndTurn();
     }
   
     private getTurn(): 'red' | 'blue' | 'end' {
@@ -119,6 +119,53 @@ export class SoloDraftService implements DraftService {
         case 21: return 'end';
         default: throw Error('Invalid turn counter');
       }
+    }
+
+    private determineTeam(username: string): { team: DraftSide; teamKey: 'blueTeam' | 'redTeam' } {
+      const team = username === this.draftState.blueTeam.name ? 'blue' : 'red';
+      const teamKey = team === 'blue' ? 'blueTeam' : 'redTeam';
+      return { team, teamKey };
+    }
+  
+    private determinePhase(turnCounter: number): 'ban' | 'pick' | 'ready' {
+      if (turnCounter <= 6) return 'ban';
+      if (turnCounter <= 12) return 'pick';
+      if (turnCounter <= 16) return 'ban';
+      if (turnCounter <= 20) return 'pick';
+      return 'ready';
+    }
+  
+    private updateStateArray<T extends string | DraftChampion>(
+      teamKey: 'blueTeam' | 'redTeam',
+      field: 'bans' | 'picks',
+      value: T,
+      condition: (v: T | null) => boolean
+    ): boolean {
+      type ArrayType = (T | null)[];
+      const currentArray = this.draftState[teamKey][field] as ArrayType;
+      const targetIndex = currentArray.findIndex(item => condition(item));
+        
+      if (targetIndex === -1) return false;
+    
+      this.draftState = {
+        ...this.draftState,
+        [teamKey]: {
+          ...this.draftState[teamKey],
+          [field]: currentArray.map((item, index) => 
+            index === targetIndex ? value : item
+          ),
+        },
+      };
+    
+      return true;
+    }
+  
+    private updatePhaseAndTurn() {
+      this.draftState = {
+        ...this.draftState,
+        phase: this.determinePhase(this.turnCounter),
+        turn: this.getTurn(),
+      };
     }
     
   

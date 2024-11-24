@@ -21,6 +21,7 @@ export default function Draft() {
     role: null,
     search: '',
   });
+  const [currentChampion, setCurrentChampion] = useState<DraftChampion | null>(null);
   const { draftState, sendEvent } = useDraftService(mode);
 
   const handleRoleSelect = (role: Role | null) => {
@@ -32,19 +33,21 @@ export default function Draft() {
   };
 
   const handleChampionSelect = (champion: DraftChampion) => {
+    setCurrentChampion(champion);
     sendEvent({
       type: 'HOVER',
-      payload: champion.id,
+      payload: champion,
       user: draftState.turn
     });
   }
 
   const handleLockIn = () => {
-    sendEvent({
-      type: 'SELECT',
-      payload: draftState.hover,
-      user: draftState.turn
-    });
+    if (currentChampion)
+      sendEvent({
+        type: 'SELECT',
+        payload: currentChampion,
+        user: draftState.turn
+      });
   }
 
   useEffect(() => {
@@ -94,7 +97,7 @@ export default function Draft() {
       <div className='flex justify-between items-stretch space-x-4 px-4 h-[43rem]'>
         <div>
           <DraftBan bans={draftState.blueTeam.bans} version={version} side='blue' />
-          <DraftTeam team={[null,null,null,null,null]} side='blue' />
+          <DraftTeam team={draftState.blueTeam.picks} side='blue' />
         </div>
         <div className='flex-1 flex flex-col overflow-hidden'>
           <div className='flex-shrink-0 mb-2'>
@@ -112,7 +115,7 @@ export default function Draft() {
         </div>
         <div>
           <DraftBan bans={draftState.redTeam.bans} version={version} side='red' />
-          <DraftTeam team={[null,null,null,null,null]} side='red' />
+          <DraftTeam team={draftState.redTeam.picks} side='red' />
         </div>
       </div>
       <div className='flex justify-between px-4 mt-6'>
