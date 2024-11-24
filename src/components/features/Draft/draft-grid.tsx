@@ -4,8 +4,9 @@ import { Role } from "@/types/role";
 export default function DraftGrid({
     champions = [],
     version = '',
-    filter
-}: {champions: Array<DraftChampion>, version: string, filter: { role: Role | null; search: string }}) {
+    filter,
+    onChampionSelect
+}: {champions: Array<DraftChampion>, version: string, filter: { role: Role | null; search: string }, onChampionSelect: ((champion: DraftChampion) => void)}) {
 
   const filteredChampions = champions.filter((champion) => {
     const matchesRole = filter.role ? champion.role.includes(filter.role) : true;
@@ -21,6 +22,7 @@ export default function DraftGrid({
         <div
           key={champion.id}
           className="relative group cursor-pointer w-24 h-24"
+          onClick={() => onChampionSelect(champion) }
         >
           <div className="aspect-square bg-zinc-800 rounded overflow-hidden transition-transform duration-200 group-hover:scale-105">
             <img

@@ -4,6 +4,7 @@ import DraftGrid from '@/components/features/Draft/draft-grid';
 import DraftHeader from '@/components/features/Draft/draft-header';
 import DraftSelection from '@/components/features/Draft/draft-selection';
 import DraftTeam from '@/components/features/Draft/draft-team';
+import { useDraftService } from '@/services/draft/draft-utils';
 import { DataChampion } from '@/types/datadragon-champion';
 import { DraftChampion } from '@/types/draft-champion';
 import { Role } from '@/types/role';
@@ -20,6 +21,7 @@ export default function Draft() {
     role: null,
     search: '',
   });
+  const { draftState, sendEvent } = useDraftService(mode);
 
   const handleRoleSelect = (role: Role | null) => {
     setFilter((prev) => ({ ...prev, role }));
@@ -29,8 +31,21 @@ export default function Draft() {
     setFilter((prev) => ({ ...prev, search }));
   };
 
-  console.log('Draft Mode:', mode);
-  console.log('Options:', { isFearless, banPick, keepBan, tournamentBan });
+  const handleChampionSelect = (champion: DraftChampion) => {
+    sendEvent({
+      type: 'HOVER',
+      payload: champion.id,
+      user: draftState.turn
+    });
+  }
+
+  const handleLockIn = () => {
+    sendEvent({
+      type: 'SELECT',
+      payload: draftState.hover,
+      user: draftState.turn
+    });
+  }
 
   useEffect(() => {
     const fetchChampions = async () => {
@@ -78,12 +93,12 @@ export default function Draft() {
       <DraftHeader blueTeamName='Blue' redTeamName='Red' timer={30} />
       <div className='flex justify-between items-stretch space-x-4 px-4 h-[43rem]'>
         <div>
-          <DraftBan bans={[null,null,null,null,null]} version={version} side='blue' />
+          <DraftBan bans={draftState.blueTeam.bans} version={version} side='blue' />
           <DraftTeam team={[null,null,null,null,null]} side='blue' />
         </div>
         <div className='flex-1 flex flex-col overflow-hidden'>
           <div className='flex-shrink-0 mb-2'>
-            <DraftSelection onRoleSelect={handleRoleSelect} onSearchChange={handleSearchChange} />
+            <DraftSelection onRoleSelect={handleRoleSelect} onSearchChange={handleSearchChange} onConfirm={() => handleLockIn()}/>
           </div>
           <div className='flex-1 overflow-y-auto'>
             {isLoading ? (
@@ -91,22 +106,22 @@ export default function Draft() {
                 <div className='animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent'></div>
               </div>
             ) : (
-              <DraftGrid champions={champions} version={version} filter={filter} />
+              <DraftGrid champions={champions} version={version} filter={filter} onChampionSelect={(champion) => handleChampionSelect(champion)} />
             )}
           </div>
         </div>
         <div>
-          <DraftBan bans={[null,null,null,null,null]} version={version} side='red' />
+          <DraftBan bans={draftState.redTeam.bans} version={version} side='red' />
           <DraftTeam team={[null,null,null,null,null]} side='red' />
         </div>
       </div>
       <div className='flex justify-between px-4 mt-6'>
-        <DraftDisabled bans={[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]} version={version} side='blue' />
-        <DraftDisabled bans={[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]} version={version} side='red' />
+        <DraftDisabled bans={draftState.blueTeam.previousPicks} version={version} side='blue' />
+        <DraftDisabled bans={draftState.redTeam.previousPicks} version={version} side='red' />
       </div>
       <div className='flex justify-between px-4'>
-        <DraftDisabled bans={[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]} version={version} side='blue' />
-        <DraftDisabled bans={[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]} version={version} side='red' />
+        <DraftDisabled bans={draftState.blueTeam.previousBans} version={version} side='blue' />
+        <DraftDisabled bans={draftState.redTeam.previousBans} version={version} side='red' />
       </div>
     </>
   )

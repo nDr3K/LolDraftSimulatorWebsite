@@ -1,7 +1,7 @@
 export type DraftState = {
     timer: boolean;
-    phase: 'ready' |'ban' | 'pick';
-    turn: string;
+    phase: 'ready' |'ban' | 'pick' | 'end';
+    turn: 'red' | 'blue' | 'end';
     hover: string;
     chat: Array<string>;
     blueTeam: TeamState;
@@ -10,8 +10,8 @@ export type DraftState = {
 
 export type TeamState = {
     name: string;
-    picks: Array<string>;
-    bans: Array<string>;
+    picks: Array<string | null>;
+    bans: Array<string | null>;
     previousPicks: Array<string>;
     previousBans: Array<string>;
 }

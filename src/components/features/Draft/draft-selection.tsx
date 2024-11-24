@@ -5,9 +5,11 @@ import { useState } from "react";
 export default function DraftSelection({
   onRoleSelect,
   onSearchChange,
+  onConfirm
 }: {
   onRoleSelect: (role: Role | null) => void;
   onSearchChange: (search: string) => void;
+  onConfirm: () => void;
 }) {
   const roles: Role[] = ['top', 'jungle', 'mid', 'bot', 'support'];
   const [selectedRole, setSelectedRole] = useState<Role | null>(null);
@@ -39,7 +41,7 @@ export default function DraftSelection({
         ))}
       </div>
       <div className="flex items-center justify-center w-full">
-        <Button className="bg-zinc-600 text-zinc-400 hover:text-black">
+        <Button className="bg-zinc-600 text-zinc-400 hover:text-black" onClick={() => onConfirm()}>
           <span>Lock in</span>
         </Button>
       </div>
