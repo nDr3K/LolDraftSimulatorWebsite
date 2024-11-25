@@ -1,6 +1,7 @@
 import { DraftChampion } from "@/types/draft-champion";
 import { Role } from "@/types/role";
 import classNames from "classnames";
+import { useState } from "react";
 
 export default function DraftGrid({
     champions = [],
@@ -8,6 +9,7 @@ export default function DraftGrid({
     filter,
     onChampionSelect
 }: {champions: Array<DraftChampion>, version: string, filter: { role: Role | null; search: string }, onChampionSelect: ((champion: DraftChampion) => void)}) {
+  const [selectedChampion, setSelectedChampion] = useState<DraftChampion | null>(null);
 
   const filteredChampions = champions.filter((champion) => {
     const matchesRole = filter.role ? champion.role.includes(filter.role) : true;
@@ -18,17 +20,24 @@ export default function DraftGrid({
   });
 
   return (
-    <div className="flex flex-wrap gap-2 overflow-y-auto">
+    <div className="flex flex-wrap gap-2 overflow-y-auto p-1">
       {filteredChampions.map((champion) => champion.id && (
         <div
           key={champion.id}
           className="relative group cursor-pointer w-24 h-24"
-          onClick={() => onChampionSelect(champion) }
+          onClick={() => {
+              if (champion.status !== 'disabled') {
+                onChampionSelect(champion)
+                setSelectedChampion(champion)
+              }
+            } 
+          }
         >
           <div className={classNames(
             "aspect-square bg-zinc-800 rounded overflow-hidden transition-transform duration-200 group-hover:scale-105",
             {
-              'grayscale' : champion.status == 'disabled'
+              'grayscale' : champion.status == 'disabled',
+              'border-2 border-red-500' : selectedChampion?.id == champion.id
             }
           )}>
             <img
