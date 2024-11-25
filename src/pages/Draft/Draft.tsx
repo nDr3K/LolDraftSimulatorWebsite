@@ -22,7 +22,7 @@ export default function Draft() {
     search: '',
   });
   const [currentChampion, setCurrentChampion] = useState<DraftChampion | null>(null);
-  const { draftState, sendEvent } = useDraftService(mode);
+  const { draftState, sendEvent } = useDraftService(mode, {isFearless: isFearless, banPick: banPick, keepBan: keepBan, tournamentBan: tournamentBan});
 
   const handleRoleSelect = (role: Role | null) => {
     setFilter((prev) => ({ ...prev, role }));
@@ -86,6 +86,8 @@ export default function Draft() {
             status:  disabledChampionIds.has(champion.id) ? 'disabled' : 'none'
           })
         );
+
+        transformedChampions.sort((a,b) => a.name.localeCompare(b.name));
 
         if(draftState.phase !== 'pick') {
           transformedChampions.unshift({id: 'none',name:'none',role: [],status:'none'})
