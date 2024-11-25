@@ -29,15 +29,16 @@ export class SoloDraftService implements DraftService {
           //no chat for offline
           break;
         case 'HOVER':
-          if (this.draftState.phase == 'pick')
+          if (this.draftState.phase == 'pick') {
             this.handleHoverEvent(event);
+            this.notifySubscribers(this.draftState);
+          }
           break;
         case 'SELECT':
           this.handleSelectEvent(event);
+          this.notifySubscribers(this.draftState);
           break;
       }
-  
-      this.notifySubscribers(this.draftState);
     }
 
     private handleHoverEvent(event: DraftEvent) {
