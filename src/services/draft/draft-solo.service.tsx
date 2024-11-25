@@ -88,6 +88,36 @@ export class SoloDraftService implements DraftService {
       this.turnCounter++;
       this.updatePhaseAndTurn();
     }
+
+    private getStandardTurn(): 'red' | 'blue' | 'end' {
+      switch(this.turnCounter) {
+        //bans
+        case 1: return 'blue';
+        case 2: return 'red';
+        case 3: return 'blue';
+        case 4: return 'red';
+        case 5: return 'blue';
+        case 6: return 'red';
+        case 7: return 'blue';
+        case 8: return 'red';
+        case 9: return 'blue';
+        case 10: return 'red';
+        //picks
+        case 11: return 'blue';
+        case 12: return 'red';
+        case 13: return 'red';
+        case 14: return 'blue';
+        case 15: return 'blue';
+        case 16: return 'red';
+        case 17: return 'red';
+        case 18: return 'blue';
+        case 19: return 'blue';
+        case 20: return 'red';
+        //end
+        case 21: return 'end';
+        default: throw Error('Invalid turn counter');
+      }
+    }
   
     private getTurn(): 'red' | 'blue' | 'end' {
       switch(this.turnCounter) {
@@ -115,6 +145,7 @@ export class SoloDraftService implements DraftService {
         case 18: return 'blue';
         case 19: return 'blue';
         case 20: return 'red';
+        //end
         case 21: return 'end';
         default: throw Error('Invalid turn counter');
       }
@@ -124,6 +155,12 @@ export class SoloDraftService implements DraftService {
       const team = username === this.draftState.blueTeam.name ? 'blue' : 'red';
       const teamKey = team === 'blue' ? 'blueTeam' : 'redTeam';
       return { team, teamKey };
+    }
+
+    private determineStandardPhase(turnCounter: number): 'ban' | 'pick' | 'ready' {
+      if (turnCounter <= 10) return 'ban';
+      if (turnCounter <= 20) return 'pick';
+      return 'ready'
     }
   
     private determinePhase(turnCounter: number): 'ban' | 'pick' | 'ready' {
@@ -162,8 +199,8 @@ export class SoloDraftService implements DraftService {
     private updatePhaseAndTurn() {
       this.draftState = {
         ...this.draftState,
-        phase: this.determinePhase(this.turnCounter),
-        turn: this.getTurn(),
+        phase: this.draftState.options.tournamentBan ? this.determinePhase(this.turnCounter) : this.determineStandardPhase(this.turnCounter),
+        turn: this.draftState.options.tournamentBan ? this.getTurn() : this.getStandardTurn(),
       };
     }
     

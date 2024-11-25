@@ -4,9 +4,11 @@ import { DraftState } from './model/draft-state';
 import { DraftEvent } from './types/draft-event';
 import { SoloDraftService } from './draft-solo.service';
 import { MultiplayerDraftService } from './draft-multiplayer.service';
+import { DraftOptions } from '@/types/draft-options';
 
 export function useDraftService(
     mode: 'solo' | 'multiplayer', 
+    options: DraftOptions,
     gameId?: string,
     blueTeamName: string = 'blue',
     redTeamName: string = 'red'
@@ -15,7 +17,6 @@ export function useDraftService(
   const [draftState, setDraftState] = useState<DraftState>({
     timer: false,
     turn: 'blue',
-    hover: '',
     chat: [],
     phase: 'ready',
     blueTeam: {
@@ -31,7 +32,8 @@ export function useDraftService(
       picks: [null,null,null,null,null],
       previousBans: [],
       previousPicks: []
-    }
+    },
+    options: options
   });
 
   useEffect(() => {

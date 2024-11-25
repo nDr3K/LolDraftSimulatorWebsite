@@ -1,4 +1,5 @@
 import { DraftChampion } from "@/types/draft-champion";
+import {DraftOptions} from "@/types/draft-options";
 
 export type DraftState = {
     timer: boolean;
@@ -7,6 +8,7 @@ export type DraftState = {
     chat: Array<string>;
     blueTeam: TeamState;
     redTeam: TeamState;
+    options: DraftOptions;
 }
 
 export type TeamState = {
