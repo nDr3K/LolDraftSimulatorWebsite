@@ -71,12 +71,19 @@ export default function Draft() {
         }
         const championsData = await championsResponse.json();
 
+        const disabledChampionIds = new Set([
+          ...draftState.blueTeam.bans,
+          ...draftState.redTeam.bans,
+          ...draftState.blueTeam.picks.filter(pick => pick?.status === 'selected').map(pick => pick!.id),
+          ...draftState.redTeam.picks.filter(pick => pick?.status === 'selected').map(pick => pick!.id)
+        ].filter(Boolean));
+
         const transformedChampions: Array<DraftChampion> = Object.values(championsData.data as Record<string,DataChampion>).map(
           (champion: DataChampion) => ({
             id: champion.id,
             name: champion.name,
             role: [],
-            status: 'none'
+            status:  disabledChampionIds.has(champion.id) ? 'disabled' : 'none'
           })
         );
 
@@ -89,7 +96,8 @@ export default function Draft() {
     };
 
     fetchChampions();
-  }, []);
+  }, [draftState.blueTeam.bans, draftState.redTeam.bans, 
+    draftState.blueTeam.picks, draftState.redTeam.picks]);
 
   return(
     <>

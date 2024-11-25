@@ -1,5 +1,6 @@
 import { DraftChampion } from "@/types/draft-champion";
 import { Role } from "@/types/role";
+import classNames from "classnames";
 
 export default function DraftGrid({
     champions = [],
@@ -24,7 +25,12 @@ export default function DraftGrid({
           className="relative group cursor-pointer w-24 h-24"
           onClick={() => onChampionSelect(champion) }
         >
-          <div className="aspect-square bg-zinc-800 rounded overflow-hidden transition-transform duration-200 group-hover:scale-105">
+          <div className={classNames(
+            "aspect-square bg-zinc-800 rounded overflow-hidden transition-transform duration-200 group-hover:scale-105",
+            {
+              'grayscale' : champion.status == 'disabled'
+            }
+          )}>
             <img
               src={champion.id == 'none' 
                 ? 'src/assets/placeholder.png' 

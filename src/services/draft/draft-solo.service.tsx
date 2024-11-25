@@ -18,8 +18,6 @@ export class SoloDraftService implements DraftService {
     }
   
     async sendEvent(event: DraftEvent): Promise<void> {
-      console.log(this.draftState)
-  
       switch (event.type) {
         case 'START':
           //no readycheck for offline
