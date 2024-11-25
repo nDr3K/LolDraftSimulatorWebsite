@@ -50,7 +50,7 @@ export default function DraftGrid({
             />
           </div>
           {champion.name !== 'none' && (
-            <div className="absolute bottom-0 left-0 right-0 text-center text-xs text-white bg-black/50 py-1">
+            <div className="absolute bottom-0 left-0 right-0 text-center text-xs text-white bg-black/50 py-1 transition-transform duration-200 group-hover:scale-105">
               {champion.name}
             </div>
           )}
