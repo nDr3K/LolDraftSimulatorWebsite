@@ -46,12 +46,14 @@ export default function DraftGrid({
                 : `https://ddragon.leagueoflegends.com/cdn/${version}/img/champion/${champion.id}.png`
               }
               alt={champion.name}
-              className="object-cover object-center"
+              className="h-full w-full object-cover object-center"
             />
           </div>
-          <div className="absolute bottom-0 left-0 right-0 text-center text-xs text-white bg-black/50 py-1">
-            {champion.name}
-          </div>
+          {champion.name !== 'none' && (
+            <div className="absolute bottom-0 left-0 right-0 text-center text-xs text-white bg-black/50 py-1">
+              {champion.name}
+            </div>
+          )}
         </div>
       ))}
     </div>

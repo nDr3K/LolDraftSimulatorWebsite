@@ -87,6 +87,10 @@ export default function Draft() {
           })
         );
 
+        if(draftState.phase !== 'pick') {
+          transformedChampions.unshift({id: 'none',name:'none',role: [],status:'none'})
+        }
+
         setChampions(transformedChampions);
       } catch (err) {
         console.error('Error fetching champion data:', err);
@@ -97,7 +101,7 @@ export default function Draft() {
 
     fetchChampions();
   }, [draftState.blueTeam.bans, draftState.redTeam.bans, 
-    draftState.blueTeam.picks, draftState.redTeam.picks]);
+    draftState.blueTeam.picks, draftState.redTeam.picks, draftState.phase]);
 
   return(
     <>
