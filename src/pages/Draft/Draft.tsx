@@ -45,7 +45,7 @@ export default function Draft() {
     if (currentChampion)
       sendEvent({
         type: 'SELECT',
-        payload: currentChampion,
+        payload: {...currentChampion, status: 'selected'},
         user: draftState.turn
       });
   }
