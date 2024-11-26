@@ -8,7 +8,8 @@ export default function Home() {
   const [draftOptions, setDraftOptions] = useState({
     isFearless: true,
     banPick: true,
-    keepBan: false
+    keepBan: false,
+    tournamentBan: true
   });
   
   const handleCardClick = (mode: 'solo' | 'multiplayer') => {
