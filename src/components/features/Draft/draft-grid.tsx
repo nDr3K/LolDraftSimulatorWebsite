@@ -7,8 +7,9 @@ export default function DraftGrid({
     champions = [],
     version = '',
     filter,
-    onChampionSelect
-}: {champions: Array<DraftChampion>, version: string, filter: { role: Role | null; search: string }, onChampionSelect: ((champion: DraftChampion) => void)}) {
+    onChampionSelect,
+    state
+}: {champions: Array<DraftChampion>, version: string, filter: { role: Role | null; search: string }, onChampionSelect: ((champion: DraftChampion) => void), state: string}) {
   const [selectedChampion, setSelectedChampion] = useState<DraftChampion | null>(null);
 
   const filteredChampions = champions.filter((champion) => {
@@ -26,6 +27,7 @@ export default function DraftGrid({
           key={champion.id}
           className="relative group cursor-pointer w-24 h-24"
           onClick={() => {
+              if (state == 'ready' || state == 'end') return;
               if (champion.status !== 'disabled') {
                 onChampionSelect(champion)
                 setSelectedChampion(champion)

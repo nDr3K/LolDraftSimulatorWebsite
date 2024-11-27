@@ -42,13 +42,26 @@ export default function Draft() {
   }
 
   const handleLockIn = () => {
-    if (currentChampion) {
-      sendEvent({
-        type: 'SELECT',
-        payload: {...currentChampion, status: 'selected'},
-        user: draftState.turn
-      });
-      setCurrentChampion(null);
+    switch(draftState.phase) {
+      case 'ban':
+      case 'pick':
+        if (currentChampion) {
+          sendEvent({
+            type: 'SELECT',
+            payload: {...currentChampion, status: 'selected'},
+            user: draftState.turn
+          });
+          setCurrentChampion(null);
+        }
+        break;
+      case 'ready':
+      case 'end':
+        sendEvent({
+          type: 'START',
+          payload: null,
+          user: '', //red/blue/userId -> passed from multiplayer
+        })
+        break;
     }
   }
 
@@ -117,7 +130,7 @@ export default function Draft() {
         </div>
         <div className='flex-1 flex flex-col overflow-hidden'>
           <div className='flex-shrink-0 mb-2'>
-            <DraftSelection onRoleSelect={handleRoleSelect} onSearchChange={handleSearchChange} onConfirm={() => handleLockIn()}/>
+            <DraftSelection onRoleSelect={handleRoleSelect} onSearchChange={handleSearchChange} onConfirm={() => handleLockIn()} state={draftState.phase}/>
           </div>
           <div className='flex-1 overflow-y-auto'>
             {isLoading ? (
@@ -125,7 +138,7 @@ export default function Draft() {
                 <div className='animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent'></div>
               </div>
             ) : (
-              <DraftGrid champions={champions} version={version} filter={filter} onChampionSelect={(champion) => handleChampionSelect(champion)} />
+              <DraftGrid champions={champions} version={version} filter={filter} onChampionSelect={(champion) => handleChampionSelect(champion)} state={draftState.phase} />
             )}
           </div>
         </div>

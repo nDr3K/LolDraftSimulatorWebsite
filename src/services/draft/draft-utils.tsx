@@ -18,7 +18,7 @@ export function useDraftService(
     timer: false,
     turn: 'blue',
     chat: [],
-    phase: 'ready',
+    phase: mode === 'multiplayer' && gameId ? 'ready' : 'ban',
     blueTeam: {
       name: blueTeamName,
       bans: [null,null,null,null,null],
@@ -37,16 +37,16 @@ export function useDraftService(
   });
 
   useEffect(() => {
-    const servivce = mode === 'multiplayer' && gameId
+    const service = mode === 'multiplayer' && gameId
       ? new MultiplayerDraftService(gameId)
       : new SoloDraftService(draftState);
 
-    const unsubscribe = servivce.subscribe(setDraftState);
-    setDraftService(servivce);
+    const unsubscribe = service.subscribe(setDraftState);
+    setDraftService(service);
 
     return () => {
       unsubscribe();
-      servivce.disconnect();
+      service.disconnect();
     };
   }, [mode, gameId]);
 

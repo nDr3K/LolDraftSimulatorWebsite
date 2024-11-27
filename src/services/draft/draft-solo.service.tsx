@@ -20,7 +20,7 @@ export class SoloDraftService implements DraftService {
     async sendEvent(event: DraftEvent): Promise<void> {
       switch (event.type) {
         case 'START':
-          //no readycheck for offline
+          this.handleStatEvent();
           break;
         case 'TIMEOUT':
           //no timer for offline
@@ -41,9 +41,20 @@ export class SoloDraftService implements DraftService {
       }
     }
 
+    private handleStatEvent() {
+      switch(this.draftState.phase) {
+        case 'ready':
+          break;
+        case 'end':
+          break;
+        default:
+          break;
+      }
+    }
+
     private handleHoverEvent(event: DraftEvent) {
       const { teamKey } = this.determineTeam(event.user);
-      const hoverChampion: DraftChampion = { ...event.payload, status: 'hover' };
+      const hoverChampion: DraftChampion = { ...event.payload!, status: 'hover' };
   
       const updated = this.updateStateArray<DraftChampion>(
         teamKey,
@@ -71,13 +82,13 @@ export class SoloDraftService implements DraftService {
         ? this.updateStateArray<string>(
             teamKey,
             field,
-            event.payload.id,
+            event.payload!.id,
             (v: string | null) => v === null
           )
         : this.updateStateArray<DraftChampion>(
             teamKey,
             field,
-            event.payload,
+            event.payload!,
             (v: DraftChampion | null) => v?.status === 'hover'
           );
   
