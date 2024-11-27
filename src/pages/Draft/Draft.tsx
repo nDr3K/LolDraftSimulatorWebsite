@@ -42,12 +42,14 @@ export default function Draft() {
   }
 
   const handleLockIn = () => {
-    if (currentChampion)
+    if (currentChampion) {
       sendEvent({
         type: 'SELECT',
         payload: {...currentChampion, status: 'selected'},
         user: draftState.turn
       });
+      setCurrentChampion(null);
+    }
   }
 
   useEffect(() => {
