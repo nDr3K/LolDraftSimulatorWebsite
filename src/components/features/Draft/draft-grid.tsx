@@ -20,8 +20,6 @@ export default function DraftGrid({
     return matchesRole && matchesSearch;
   });
 
-  const hoveredChampion = champions.filter((champion) => champion.status === 'hover')[0];
-
   return (
     <div className="flex flex-wrap gap-2 overflow-y-auto p-1">
       {filteredChampions.map((champion) => champion.id && (
@@ -41,7 +39,7 @@ export default function DraftGrid({
             "aspect-square bg-zinc-800 rounded overflow-hidden transition-transform duration-200 group-hover:scale-105",
             {
               'grayscale' : champion.status == 'disabled',
-              'border-2 border-red-500' : selectedChampion?.id == champion.id || hoveredChampion?.id === champion.id
+              'border-2 border-red-500' : selectedChampion?.id == champion.id
             }
           )}>
             <img
