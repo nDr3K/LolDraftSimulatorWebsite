@@ -16,7 +16,6 @@ export default function Draft() {
   const { mode, isFearless, banPick, keepBan, tournamentBan } = location.state || {};
   const [version, setVersion] = useState('');
   const [champions, setChampions] = useState<Array<DraftChampion>>([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [filter, setFilter] = useState<{ role: Role | null; search: string }>({
     role: null,
     search: '',
@@ -68,8 +67,6 @@ export default function Draft() {
   useEffect(() => {
     const fetchChampions = async () => {
       try {
-        setIsLoading(true);
-
         const versionsResponse = await fetch('https://ddragon.leagueoflegends.com/api/versions.json');
         if (!versionsResponse.ok) {
           throw new Error('Failed to fetch versions');
@@ -98,7 +95,7 @@ export default function Draft() {
             id: champion.id,
             name: champion.name,
             role: [],
-            status:  disabledChampionIds.has(champion.id) ? 'disabled' : 'none'
+            status: disabledChampionIds.has(champion.id) ? 'disabled' : currentChampion?.id == champion.id ? 'hover' : 'none'
           })
         );
 
@@ -111,8 +108,6 @@ export default function Draft() {
         setChampions(transformedChampions);
       } catch (err) {
         console.error('Error fetching champion data:', err);
-      } finally {
-        setIsLoading(false);
       }
     };
 
@@ -133,13 +128,7 @@ export default function Draft() {
             <DraftSelection onRoleSelect={handleRoleSelect} onSearchChange={handleSearchChange} onConfirm={() => handleLockIn()} state={draftState.phase}/>
           </div>
           <div className='flex-1 overflow-y-auto'>
-            {isLoading ? (
-              <div className='flex justify-center items-center h-full'>
-                <div className='animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent'></div>
-              </div>
-            ) : (
-              <DraftGrid champions={champions} version={version} filter={filter} onChampionSelect={(champion) => handleChampionSelect(champion)} state={draftState.phase} />
-            )}
+            <DraftGrid champions={champions} version={version} filter={filter} onChampionSelect={(champion) => handleChampionSelect(champion)} state={draftState.phase} />
           </div>
         </div>
         <div>
