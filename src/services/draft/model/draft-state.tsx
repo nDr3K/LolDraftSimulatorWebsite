@@ -5,6 +5,7 @@ export type DraftState = {
     timer: boolean;
     phase: 'ready' |'ban' | 'pick' | 'end';
     turn: 'red' | 'blue' | 'end';
+    game: number;
     chat: Array<string>;
     blueTeam: TeamState;
     redTeam: TeamState;

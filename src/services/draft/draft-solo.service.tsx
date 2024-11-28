@@ -43,8 +43,6 @@ export class SoloDraftService implements DraftService {
 
     private handleStatEvent() {
       switch(this.draftState.phase) {
-        case 'ready':
-          break;
         case 'end':
           break;
         default:
@@ -168,18 +166,18 @@ export class SoloDraftService implements DraftService {
       return { team, teamKey };
     }
 
-    private determineStandardPhase(turnCounter: number): 'ban' | 'pick' | 'ready' {
+    private determineStandardPhase(turnCounter: number): 'ban' | 'pick' | 'end' {
       if (turnCounter <= 10) return 'ban';
       if (turnCounter <= 20) return 'pick';
-      return 'ready'
+      return 'end'
     }
   
-    private determinePhase(turnCounter: number): 'ban' | 'pick' | 'ready' {
+    private determinePhase(turnCounter: number): 'ban' | 'pick' | 'end' {
       if (turnCounter <= 6) return 'ban';
       if (turnCounter <= 12) return 'pick';
       if (turnCounter <= 16) return 'ban';
       if (turnCounter <= 20) return 'pick';
-      return 'ready';
+      return 'end';
     }
   
     private updateStateArray<T extends string | DraftChampion>(

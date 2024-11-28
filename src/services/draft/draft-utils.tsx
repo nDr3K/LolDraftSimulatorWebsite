@@ -6,19 +6,21 @@ import { SoloDraftService } from './draft-solo.service';
 import { MultiplayerDraftService } from './draft-multiplayer.service';
 import { DraftOptions } from '@/types/draft-options';
 
-export function useDraftService(
-    mode: 'solo' | 'multiplayer', 
-    options: DraftOptions,
-    gameId?: string,
-    blueTeamName: string = 'blue',
-    redTeamName: string = 'red'
-) {
-  const [draftService, setDraftService] = useState<DraftService | null>(null);
-  const [draftState, setDraftState] = useState<DraftState>({
-    timer: false,
-    turn: 'blue',
+export function getInitState(
+  phase: 'ready' | 'ban',
+  game: number,
+  timer: boolean,
+  turn: 'red' | 'blue',
+  blueTeamName: string,
+  redTeamName: string,
+  options: DraftOptions
+): DraftState {
+  return {
+    timer: timer,
+    turn: turn,
     chat: [],
-    phase: mode === 'multiplayer' && gameId ? 'ready' : 'ban',
+    phase: phase,
+    game: game,
     blueTeam: {
       name: blueTeamName,
       bans: [null,null,null,null,null],
@@ -34,7 +36,26 @@ export function useDraftService(
       previousPicks: []
     },
     options: options
-  });
+  }
+}
+
+export function useDraftService(
+    mode: 'solo' | 'multiplayer', 
+    options: DraftOptions,
+    gameId?: string,
+    blueTeamName: string = 'blue',
+    redTeamName: string = 'red'
+) {
+  const [draftService, setDraftService] = useState<DraftService | null>(null);
+  const [draftState, setDraftState] = useState<DraftState>(getInitState(
+    mode === 'multiplayer' && gameId ? 'ready' : 'ban',
+    1,
+    false,
+    'blue',
+    blueTeamName,
+    redTeamName,
+    options
+  ));
 
   useEffect(() => {
     const service = mode === 'multiplayer' && gameId
