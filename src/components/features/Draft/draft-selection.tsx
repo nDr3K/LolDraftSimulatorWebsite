@@ -43,10 +43,10 @@ export default function DraftSelection({
         ))}
       </div>
       <div className="flex items-center justify-center w-full">
-        <Button className="bg-zinc-600 text-zinc-400 hover:text-black" onClick={() => onConfirm()}>
+        <Button className="bg-zinc-600 text-zinc-400 hover:text-black w-24" onClick={() => onConfirm()}>
         {{
           pick: 'Lock in',
-          ban: 'Lock in',
+          ban: 'Ban',
           end: 'Start New',
           ready: 'Ready',
         }[state] || ''}
