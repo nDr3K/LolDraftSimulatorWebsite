@@ -25,7 +25,7 @@ export default function DraftBan({
           <img
             className="w-full h-full object-cover"
             src={
-              ban == null
+              ban == null || ban == 'none'
                 ? 'src/assets/placeholder.png'
                 : `https://ddragon.leagueoflegends.com/cdn/${version}/img/champion/${ban}.png`
             }
