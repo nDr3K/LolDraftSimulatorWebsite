@@ -20,7 +20,8 @@ export class SoloDraftService implements DraftService {
     async sendEvent(event: DraftEvent): Promise<void> {
       switch (event.type) {
         case 'START':
-          this.handleStatEvent();
+          this.handleStartEvent(event);
+          this.notifySubscribers(this.draftState);
           break;
         case 'TIMEOUT':
           //no timer for offline
@@ -41,18 +42,51 @@ export class SoloDraftService implements DraftService {
       }
     }
 
-    private handleStatEvent() {
+    private handleStartEvent(event: DraftEvent) {
       switch(this.draftState.phase) {
         case 'end':
+          this.draftState = {
+            ...this.draftState,
+            phase: 'restart'
+          }
+          break;
+        case 'restart':
+          if (this.draftState.game < 5)
+            this.handleRestart(event.payload as Boolean)
           break;
         default:
           break;
       }
     }
 
+    private handleRestart(switchSide: Boolean) {
+      const blueSide = switchSide ? this.draftState.redTeam : this.draftState.blueTeam;
+      const redSide = switchSide ? this.draftState.blueTeam : this.draftState.redTeam;
+      if (this.draftState.options.isFearless) {
+        blueSide.previousPicks = [...blueSide.previousPicks, ...blueSide.picks.map(p => p?.id ?? 'none')];
+        redSide.previousPicks = [...redSide.previousPicks, ...redSide.picks.map(p => p?.id ?? 'none')];
+        blueSide.previousBans = this.draftState.options.keepBan ? [...blueSide.previousBans, ...blueSide.bans.map(b => b ?? 'none')] : [];
+        redSide.previousBans = this.draftState.options.keepBan ? [...redSide.previousBans, ...redSide.bans.map(b => b ?? 'none')] : [];
+      }
+      blueSide.picks = [null,null,null,null,null];
+      redSide.picks = [null,null,null,null,null];
+      blueSide.bans = [null,null,null,null,null];
+      redSide.bans = [null,null,null,null,null];
+
+      this.turnCounter = 1;
+      this.draftState = {
+        ...this.draftState,
+        phase: 'ban',
+        game: this.draftState.game++,
+        turn: 'blue',
+        blueTeam: blueSide,
+        redTeam: redSide,
+      }
+    }
+
     private handleHoverEvent(event: DraftEvent) {
       const { teamKey } = this.determineTeam(event.user);
-      const hoverChampion: DraftChampion = { ...event.payload!, status: 'hover' };
+      const hoverChampion: DraftChampion = { ...event.payload as DraftChampion, status: 'hover' };
   
       const updated = this.updateStateArray<DraftChampion>(
         teamKey,
@@ -67,7 +101,7 @@ export class SoloDraftService implements DraftService {
       );
   
       if (!updated) {
-        console.warn('No available slot found for hover');
+        console.warn('Unable to hover the champion');
       }
     }
   
@@ -80,18 +114,18 @@ export class SoloDraftService implements DraftService {
         ? this.updateStateArray<string>(
             teamKey,
             field,
-            event.payload!.id,
+            (event.payload as DraftChampion).id,
             (v: string | null) => v === null
           )
         : this.updateStateArray<DraftChampion>(
             teamKey,
             field,
-            event.payload!,
+            event.payload as DraftChampion,
             (v: DraftChampion | null) => v?.status === 'hover'
           );
   
       if (!updated) {
-        console.warn('No available slot found for selection');
+        console.warn(`Unable to ${isBanPhase ? 'ban' : 'select'} the champion`);
         return;
       }
       this.turnCounter++;
@@ -161,7 +195,7 @@ export class SoloDraftService implements DraftService {
     }
 
     private determineTeam(username: string): { team: DraftSide; teamKey: 'blueTeam' | 'redTeam' } {
-      const team = username === this.draftState.blueTeam.name ? 'blue' : 'red';
+      const team = username === 'blue' ? 'blue' : 'red';
       const teamKey = team === 'blue' ? 'blueTeam' : 'redTeam';
       return { team, teamKey };
     }

@@ -4,6 +4,8 @@ import DraftGrid from '@/components/features/Draft/draft-grid';
 import DraftHeader from '@/components/features/Draft/draft-header';
 import DraftSelection from '@/components/features/Draft/draft-selection';
 import DraftTeam from '@/components/features/Draft/draft-team';
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { useDraftService } from '@/services/draft/draft-utils';
 import { DataChampion } from '@/types/datadragon-champion';
 import { DraftChampion } from '@/types/draft-champion';
@@ -61,7 +63,17 @@ export default function Draft() {
           user: '', //red/blue/userId -> passed from multiplayer
         })
         break;
+      case 'restart':
+        break;
     }
+  }
+
+  const handleStartNewDraft = (switchSide: Boolean) => {
+    sendEvent({
+      type: 'START',
+      payload: switchSide,
+      user: '', //red/blue/userId -> passed from multiplayer
+    })
   }
 
   useEffect(() => {
@@ -83,11 +95,18 @@ export default function Draft() {
         }
         const championsData = await championsResponse.json();
 
+        const bannedPrevPicks = draftState.options.banPick 
+          ? [...draftState.blueTeam.previousPicks,...draftState.redTeam.previousPicks]
+          : draftState.phase == 'pick' ? draftState.turn == 'blue' ? draftState.blueTeam.previousPicks : draftState.redTeam.previousPicks : []
+
         const disabledChampionIds = new Set([
           ...draftState.blueTeam.bans,
           ...draftState.redTeam.bans,
           ...draftState.blueTeam.picks.filter(pick => pick?.status === 'selected').map(pick => pick!.id),
-          ...draftState.redTeam.picks.filter(pick => pick?.status === 'selected').map(pick => pick!.id)
+          ...draftState.redTeam.picks.filter(pick => pick?.status === 'selected').map(pick => pick!.id),
+          ...draftState.blueTeam.previousBans,
+          ...draftState.redTeam.previousBans,
+          ...bannedPrevPicks
         ].filter(Boolean));
 
         const transformedChampions: Array<DraftChampion> = Object.values(championsData.data as Record<string,DataChampion>).map(
@@ -125,7 +144,7 @@ export default function Draft() {
         </div>
         <div className='flex-1 flex flex-col overflow-hidden'>
           <div className='flex-shrink-0 mb-2'>
-            <DraftSelection onRoleSelect={handleRoleSelect} onSearchChange={handleSearchChange} onConfirm={() => handleLockIn()} state={draftState.phase}/>
+            <DraftSelection onRoleSelect={handleRoleSelect} onSearchChange={handleSearchChange} onConfirm={handleLockIn} state={draftState.phase}/>
           </div>
           <div className='flex-1 overflow-y-auto'>
             <DraftGrid champions={champions} version={version} filter={filter} onChampionSelect={(champion) => handleChampionSelect(champion)} state={draftState.phase} />
@@ -144,6 +163,18 @@ export default function Draft() {
         <DraftDisabled bans={draftState.blueTeam.previousBans} version={version} side='blue' />
         <DraftDisabled bans={draftState.redTeam.previousBans} version={version} side='red' />
       </div>
+
+      <Dialog open={draftState.phase == 'restart'}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle className='text-center'>Do you want to swap side?</DialogTitle>
+              <DialogDescription className='flex justify-between px-4 py-2'>
+                <Button className="w-20 hover:cursor-pointer" onClick={() => handleStartNewDraft(true)} asChild><span>Yes</span></Button>
+                <Button className="w-20 hover:cursor-pointer" onClick={() => handleStartNewDraft(false)} asChild><span>No</span></Button>
+              </DialogDescription>
+            </DialogHeader>
+          </DialogContent>
+        </Dialog>    
     </>
   )
 }

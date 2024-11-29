@@ -3,7 +3,7 @@ import {DraftOptions} from "@/types/draft-options";
 
 export type DraftState = {
     timer: boolean;
-    phase: 'ready' |'ban' | 'pick' | 'end';
+    phase: 'ready' |'ban' | 'pick' | 'end' | 'restart';
     turn: 'red' | 'blue' | 'end';
     game: number;
     chat: Array<string>;
