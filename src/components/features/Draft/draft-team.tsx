@@ -4,8 +4,9 @@ import DraftPick from "./draft-pick";
 
 export default function DraftTeam({
     team = [],
-    side = 'blue'
-}: {team: Array<DraftChampion | null>, side: DraftSide}) {
+    side = 'blue',
+    picking = false
+}: {team: Array<DraftChampion | null>, side: DraftSide, picking: boolean}) {
     return(
         <div className="flex flex-col space-y-4">
             {team.map((champion, index) => (
@@ -13,6 +14,7 @@ export default function DraftTeam({
                     key={index}
                     champion={champion}
                     side={side}
+                    picking={picking && index == (team.findIndex(c => !c || c.status == 'hover'))}
                 />
             ))}
         </div>

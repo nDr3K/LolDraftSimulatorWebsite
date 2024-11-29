@@ -140,7 +140,7 @@ export default function Draft() {
       <div className='flex justify-between items-stretch space-x-4 px-4 h-[43rem]'>
         <div>
           <DraftBan bans={draftState.blueTeam.bans} version={version} side='blue' />
-          <DraftTeam team={draftState.blueTeam.picks} side='blue' />
+          <DraftTeam team={draftState.blueTeam.picks} side='blue' picking={draftState.turn == 'blue' && draftState.phase == 'pick'} />
         </div>
         <div className='flex-1 flex flex-col overflow-hidden'>
           <div className='flex-shrink-0 mb-2'>
@@ -152,7 +152,7 @@ export default function Draft() {
         </div>
         <div>
           <DraftBan bans={draftState.redTeam.bans} version={version} side='red' />
-          <DraftTeam team={draftState.redTeam.picks} side='red' />
+          <DraftTeam team={draftState.redTeam.picks} side='red' picking={draftState.turn == 'red' && draftState.phase == 'pick'} />
         </div>
       </div>
       <div className='flex justify-between px-4 mt-6'>
