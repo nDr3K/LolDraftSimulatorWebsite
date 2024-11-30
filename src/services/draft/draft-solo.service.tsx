@@ -52,14 +52,14 @@ export class SoloDraftService implements DraftService {
           break;
         case 'restart':
           if (this.draftState.game < 5)
-            this.handleRestart(event.payload as Boolean)
+            this.handleRestart(event.payload as boolean)
           break;
         default:
           break;
       }
     }
 
-    private handleRestart(switchSide: Boolean) {
+    private handleRestart(switchSide: boolean) {
       const blueSide = switchSide ? this.draftState.redTeam : this.draftState.blueTeam;
       const redSide = switchSide ? this.draftState.blueTeam : this.draftState.redTeam;
       if (this.draftState.options.isFearless) {

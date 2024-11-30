@@ -4,8 +4,9 @@ import classNames from "classnames";
 export default function DraftBan({
     bans = [],
     version = '',
-    side
-}: {bans: Array<string | null>, version: string, side: DraftSide}) {
+    side,
+    turn
+}: {bans: Array<string | null>, version: string, side: DraftSide, turn: DraftSide | 'end'}) {
   const displayedBans = side === 'red' ? bans.toReversed() : bans;
   return(
     <div 
@@ -41,6 +42,17 @@ export default function DraftBan({
                 }}
               ></div>
             </div>
+          )}
+          {turn == side && ((side == 'blue'
+            ? bans.findIndex(b => b == null) == index 
+            : (bans.filter(b => b == null).length - 1) == index )
+            && (
+              <div className='absolute inset-0 bg-opacity-30 animate-pulse bg-white'>
+                <span className='absolute text-zinc-300 text-xs bottom-1'>
+                  Banning...
+                </span>
+              </div>
+            )
           )}
         </div>
       ))}
