@@ -48,9 +48,9 @@ export default function DraftBan({
             : (bans.filter(b => b == null).length - 1) == index )
             && (
               <div className='absolute inset-0 bg-opacity-30 animate-pulse bg-white content-end text-center'>
-                <span className='relative text-zinc-300 text-xs bottom-px text-center'>
+                {/* <span className='relative text-zinc-300 text-xs bottom-px text-center'>
                   Banning
-                </span>
+                </span> */}
               </div>
             )
           )}
