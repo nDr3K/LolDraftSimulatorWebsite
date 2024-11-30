@@ -52,7 +52,7 @@ export default function DraftSelection({
         }[state] || ''}
         </Button>
       </div>
-      <div className="me-10">
+      <div className="me-2">
         <input
           type="text"
           placeholder="Search champions..."
