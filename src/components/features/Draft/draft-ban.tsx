@@ -30,7 +30,7 @@ export default function DraftBan({
                 ? 'src/assets/placeholder.png'
                 : `https://ddragon.leagueoflegends.com/cdn/${version}/img/champion/${ban}.png`
             }
-            alt={ban || 'placeholder'}
+            alt={ban ?? 'placeholder'}
           />
 
           {ban && (

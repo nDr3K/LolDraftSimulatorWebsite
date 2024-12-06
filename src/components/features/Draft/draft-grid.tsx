@@ -1,16 +1,22 @@
 import { DraftChampion } from "@/types/draft-champion";
 import { Role } from "@/types/role";
 import classNames from "classnames";
-import { useState } from "react";
 
 export default function DraftGrid({
     champions = [],
     version = '',
     filter,
     onChampionSelect,
+    selectedChampion,
     state
-}: {champions: Array<DraftChampion>, version: string, filter: { role: Role | null; search: string }, onChampionSelect: ((champion: DraftChampion) => void), state: string}) {
-  const [selectedChampion, setSelectedChampion] = useState<DraftChampion | null>(null);
+}: {
+  champions: Array<DraftChampion>,
+   version: string, 
+   filter: { role: Role | null; search: string }, 
+   onChampionSelect: ((champion: DraftChampion) => void),
+   selectedChampion: DraftChampion | null,
+   state: string
+  }) {
 
   const filteredChampions = champions.filter((champion) => {
     const matchesRole = filter.role ? champion.role.includes(filter.role) : true;
@@ -29,8 +35,7 @@ export default function DraftGrid({
           onClick={() => {
               if (state == 'ready' || state == 'end') return;
               if (champion.status !== 'disabled') {
-                onChampionSelect(champion)
-                setSelectedChampion(champion)
+                onChampionSelect(champion);
               }
             } 
           }

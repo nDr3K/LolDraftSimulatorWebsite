@@ -6,8 +6,8 @@ import DraftSelection from '@/components/features/Draft/draft-selection';
 import DraftTeam from '@/components/features/Draft/draft-team';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import ChampionService from '@/services/champions.service';
 import { useDraftService } from '@/services/draft/draft-utils';
-import { DataChampion } from '@/types/datadragon-champion';
 import { DraftChampion } from '@/types/draft-champion';
 import { Role } from '@/types/role';
 import { useEffect, useState } from 'react';
@@ -27,6 +27,9 @@ export default function Draft() {
 
   const handleRoleSelect = (role: Role | null) => {
     setFilter((prev) => ({ ...prev, role }));
+    if (!currentChampion?.role.some(r => r == role) && role && draftState.phase != 'pick') {
+      setCurrentChampion(null);
+    }
   };
 
   const handleSearchChange = (search: string) => {
@@ -53,6 +56,7 @@ export default function Draft() {
             user: draftState.turn
           });
           setCurrentChampion(null);
+          setFilter({ role: null, search: ''});
         }
         break;
       case 'ready':
@@ -62,6 +66,7 @@ export default function Draft() {
           payload: null,
           user: '', //red/blue/userId -> passed from multiplayer
         })
+        setFilter({ role: null, search: ''});
         break;
       case 'restart':
         break;
@@ -77,27 +82,20 @@ export default function Draft() {
   }
 
   useEffect(() => {
-    const fetchChampions = async () => {
+    const loadChampions = async () => {
       try {
-        const versionsResponse = await fetch('https://ddragon.leagueoflegends.com/api/versions.json');
-        if (!versionsResponse.ok) {
-          throw new Error('Failed to fetch versions');
-        }
-        const versions = await versionsResponse.json();
-        const latestVersion = versions[0];
-        setVersion(versions[0]);
+        const latestVersion = await ChampionService.fetchLatestVersion();
+        setVersion(latestVersion);
 
-        const championsResponse = await fetch(
-          `https://ddragon.leagueoflegends.com/cdn/${latestVersion}/data/en_US/champion.json`
-        );
-        if (!championsResponse.ok) {
-          throw new Error('Failed to fetch champions');
-        }
-        const championsData = await championsResponse.json();
-
+        const championsData = await ChampionService.fetchChampions();
+        
         const bannedPrevPicks = draftState.options.banPick 
-          ? [...draftState.blueTeam.previousPicks,...draftState.redTeam.previousPicks]
-          : draftState.phase == 'pick' ? draftState.turn == 'blue' ? draftState.blueTeam.previousPicks : draftState.redTeam.previousPicks : []
+          ? [...draftState.blueTeam.previousPicks, ...draftState.redTeam.previousPicks]
+          : draftState.phase == 'pick' 
+          ? draftState.turn == 'blue' 
+            ? draftState.blueTeam.previousPicks 
+            : draftState.redTeam.previousPicks 
+          : [];
 
         const disabledChampionIds = new Set([
           ...draftState.blueTeam.bans,
@@ -109,20 +107,12 @@ export default function Draft() {
           ...bannedPrevPicks
         ].filter(Boolean));
 
-        const transformedChampions: Array<DraftChampion> = Object.values(championsData.data as Record<string,DataChampion>).map(
-          (champion: DataChampion) => ({
-            id: champion.id,
-            name: champion.name,
-            role: [],
-            status: disabledChampionIds.has(champion.id) ? 'disabled' : currentChampion?.id == champion.id ? 'hover' : 'none'
-          })
+        const transformedChampions = ChampionService.transformChampions(
+          championsData,
+          disabledChampionIds,
+          currentChampion,
+          draftState.phase
         );
-
-        transformedChampions.sort((a,b) => a.name.localeCompare(b.name));
-
-        if(draftState.phase !== 'pick') {
-          transformedChampions.unshift({id: 'none',name:'none',role: [],status:'none'})
-        }
 
         setChampions(transformedChampions);
       } catch (err) {
@@ -130,9 +120,14 @@ export default function Draft() {
       }
     };
 
-    fetchChampions();
-  }, [draftState.blueTeam.bans, draftState.redTeam.bans, 
-    draftState.blueTeam.picks, draftState.redTeam.picks, draftState.phase]);
+    loadChampions();
+  }, [
+    draftState.blueTeam.bans, 
+    draftState.redTeam.bans, 
+    draftState.blueTeam.picks, 
+    draftState.redTeam.picks, 
+    draftState.phase
+  ]);
 
   return(
     <>
@@ -147,7 +142,7 @@ export default function Draft() {
             <DraftSelection onRoleSelect={handleRoleSelect} onSearchChange={handleSearchChange} onConfirm={handleLockIn} state={draftState.phase}/>
           </div>
           <div className='flex-1 overflow-y-auto'>
-            <DraftGrid champions={champions} version={version} filter={filter} onChampionSelect={(champion) => handleChampionSelect(champion)} state={draftState.phase} />
+            <DraftGrid champions={champions} version={version} filter={filter} onChampionSelect={(champion) => handleChampionSelect(champion)} selectedChampion={currentChampion} state={draftState.phase} />
           </div>
         </div>
         <div>
