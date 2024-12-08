@@ -53,7 +53,8 @@ export default function Draft() {
     sendEvent({
       type: 'HOVER',
       payload: champion,
-      user: role ?? draftState.turn
+      user: role ?? draftState.turn,
+      flag: null
     });
   }
 
@@ -65,7 +66,8 @@ export default function Draft() {
           sendEvent({
             type: 'SELECT',
             payload: {...currentChampion, status: 'selected'},
-            user: role ?? draftState.turn
+            user: role ?? draftState.turn,
+            flag: null
           });
           setCurrentChampion(null);
           setFilter({ role: null, search: ''});
@@ -77,6 +79,7 @@ export default function Draft() {
           type: 'START',
           payload: null,
           user: role ?? '',
+          flag: null,
         })
         setFilter({ role: null, search: ''});
         break;
@@ -85,11 +88,12 @@ export default function Draft() {
     }
   }
 
-  const handleStartNewDraft = (switchSide: Boolean) => {
+  const handleStartNewDraft = (switchSide: boolean) => {
     sendEvent({
       type: 'START',
-      payload: switchSide,
+      payload: null,
       user: role ?? '',
+      flag: switchSide
     })
   }
 

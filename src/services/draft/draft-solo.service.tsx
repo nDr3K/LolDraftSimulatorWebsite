@@ -52,7 +52,7 @@ export class SoloDraftService implements DraftService {
           break;
         case 'restart':
           if (this.draftState.game < 5)
-            this.handleRestart(event.payload as boolean)
+            this.handleRestart(event.flag || false)
           break;
         default:
           break;
