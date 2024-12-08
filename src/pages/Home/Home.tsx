@@ -33,9 +33,9 @@ export default function Home() {
           blueTeamName: draftOptions.blueTeamName,
           redTeamName: draftOptions.redTeamName,
           options: {
-            banPick: draftOptions.fearlessMode == 'standard' || draftOptions.fearlessMode == 'hardcore',
+            banPick: draftOptions.isFearless && (draftOptions.fearlessMode == 'standard' || draftOptions.fearlessMode == 'hardcore'),
             isFearless: draftOptions.isFearless,
-            keepBan: draftOptions.fearlessMode == 'hardcore',
+            keepBan: draftOptions.isFearless && draftOptions.fearlessMode == 'hardcore',
             tournamentBan: draftOptions.tournamentBan
           }
         });
