@@ -1,7 +1,10 @@
 export type LobbyOptions = {
   blueTeamName: string;
   redTeamName: string;
-} & DraftOptions
+  isFearless: boolean;
+  fearlessMode: 'soft' | 'standard' | 'hardcore';
+  tournamentBan: boolean;
+}
 
 export type DraftOptions = {
   isFearless: boolean;

@@ -11,8 +11,7 @@ export default function Home() {
   const navigate = useNavigate();
   const [draftOptions, setDraftOptions] = useState<LobbyOptions>({
     isFearless: true,
-    banPick: true,
-    keepBan: false,
+    fearlessMode: 'standard',
     tournamentBan: true,
     blueTeamName: 'Blue Team',
     redTeamName: 'Red Team'
@@ -34,9 +33,9 @@ export default function Home() {
           blueTeamName: draftOptions.blueTeamName,
           redTeamName: draftOptions.redTeamName,
           options: {
-            banPick: draftOptions.banPick,
+            banPick: draftOptions.fearlessMode == 'standard' || draftOptions.fearlessMode == 'hardcore',
             isFearless: draftOptions.isFearless,
-            keepBan: draftOptions.keepBan,
+            keepBan: draftOptions.fearlessMode == 'hardcore',
             tournamentBan: draftOptions.tournamentBan
           }
         });

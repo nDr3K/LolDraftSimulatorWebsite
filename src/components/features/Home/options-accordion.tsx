@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Label} from "@/components/ui/label";
 import { LobbyOptions } from "@/types/draft-options";
+import { Switch } from "@/components/ui/switch";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 export default function OptionsAccordion({ onOptionsChange }: { onOptionsChange: (options: LobbyOptions) => void}) {
   const [options, setOptions] = useState<LobbyOptions>({
     isFearless: true,
-    banPick: true,
-    keepBan: false,
+    fearlessMode: 'standard',
     tournamentBan: true,
     blueTeamName: 'Blue Team',
     redTeamName: 'Red Team',
@@ -19,9 +19,6 @@ export default function OptionsAccordion({ onOptionsChange }: { onOptionsChange:
       const updatedOptions = {
         ...prevOptions,
         [option]: value,
-        ...(option === 'isFearless' && typeof value === 'boolean' && !value
-          ? { banPick: false, keepBan: false }
-          : {}),
       };
       onOptionsChange(updatedOptions);
       return updatedOptions;
@@ -33,79 +30,67 @@ export default function OptionsAccordion({ onOptionsChange }: { onOptionsChange:
       <AccordionItem value="advanced-options">
         <AccordionTrigger>Advanced Options</AccordionTrigger>
         <AccordionContent>
-          <div className="flex items-center space-x-10">
-            <div className="flex items-center space-x-2">
-              <Checkbox 
-                id="normal" 
-                checked={!options.isFearless} 
-                onCheckedChange={(checked) => handleOptionChange('isFearless', !checked)}
-              />
-              <Label htmlFor="normal">Normal</Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Checkbox 
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <Label htmlFor="fearless">Fearless</Label>
+              <Switch 
                 id="fearless" 
                 checked={options.isFearless} 
-                onCheckedChange={(checked) => handleOptionChange('isFearless', checked as boolean)}
-               />
-              <Label htmlFor="fearless">Fearless</Label>
+                onCheckedChange={(checked) => handleOptionChange('isFearless', checked)}
+              />
             </div>
-          </div>
-          {options.isFearless && (
-            <div className="pl-4 space-y-4 mt-4">
-              <div className="flex items-center space-x-2">
-                <Checkbox 
-                  id="ban-pick" 
-                  checked={options.banPick}
-                  onCheckedChange={(checked) => handleOptionChange('banPick', checked as boolean)}
-                />
-                <Label htmlFor="ban-pick">Ban pick for both teams</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox 
-                  id="keep-ban" 
-                  checked={options.keepBan}
-                  onCheckedChange={(checked) => handleOptionChange('keepBan', checked as boolean)}
-                />
-                <Label htmlFor="keep-ban">Keep ban</Label>
-              </div>
+            
+            <div className={options.isFearless ? '' : 'opacity-50'}>
+              <Label className="mb-2 block">Fearless Mode:</Label>
+              <RadioGroup 
+                className="flex space-x-4" 
+                value={options.fearlessMode} 
+                onValueChange={(value) => handleOptionChange('fearlessMode', value)}
+                disabled={!options.isFearless}
+              >
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="soft" id="soft" />
+                  <Label htmlFor="soft">Soft</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="standard" id="standard" />
+                  <Label htmlFor="standard">Standard</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="hardcore" id="hardcore" />
+                  <Label htmlFor="hardcore">Hardcore</Label>
+                </div>
+              </RadioGroup>
             </div>
-          )}
-          <div className="flex items-center space-x-10 mt-4">
-            <div className="flex items-center space-x-2">
-              <Checkbox 
+
+            <div className="flex items-center justify-between">
+              <Label htmlFor="tournamentBan">Tournament Bans</Label>
+              <Switch 
                 id="tournamentBan" 
                 checked={options.tournamentBan} 
-                onCheckedChange={(checked) => handleOptionChange('tournamentBan', checked as boolean)}
+                onCheckedChange={(checked) => handleOptionChange('tournamentBan', checked)}
               />
-              <Label htmlFor="tournamentBan">Tournament Bans</Label>
             </div>
-            <div className="flex items-center space-x-2">
-              <Checkbox 
-                id="draftBan" 
-                checked={!options.tournamentBan} 
-                onCheckedChange={(checked) => handleOptionChange('tournamentBan', !checked)}
-              />
-              <Label htmlFor="draftBan">Draft Bans</Label>
-            </div>
-          </div>
-          <div className="flex flex-col mt-4 gap-2">
-            <div className="w-full flex justify-between items-center space-x-2 pe-4">
+
+            <div className="w-full flex justify-between items-center space-x-2">
               <Label htmlFor="blueTeamName">Blue Team Name:</Label>
               <input
                 type="text"
+                id="blueTeamName"
                 value={options.blueTeamName}
                 className="bg-zinc-800 text-white rounded px-4 py-1 focus:outline-none focus:ring-1 focus:ring-amber-500"
                 onChange={(e) => handleOptionChange('blueTeamName', e.target.value)}
               />
             </div>
-            <div className="w-full flex justify-between items-center space-x-2 pe-4">
+
+            <div className="w-full flex justify-between items-center space-x-2">
               <Label htmlFor="redTeamName">Red Team Name:</Label>
               <input
                 type="text"
+                id="redTeamName"
                 value={options.redTeamName}
                 className="bg-zinc-800 text-white rounded px-4 py-1 focus:outline-none focus:ring-1 focus:ring-amber-500"
-                onChange={(e) => handleOptionChange('redTeamName' ,e.target.value)}
+                onChange={(e) => handleOptionChange('redTeamName', e.target.value)}
               />
             </div>
           </div>
