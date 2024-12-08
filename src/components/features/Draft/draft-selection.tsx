@@ -49,6 +49,7 @@ export default function DraftSelection({
           ban: 'Ban',
           end: 'Start New',
           ready: 'Ready',
+          waiting: 'Waiting...'
         }[state] || ''}
         </Button>
       </div>

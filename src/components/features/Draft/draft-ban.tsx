@@ -6,7 +6,7 @@ export default function DraftBan({
     version = '',
     side,
     turn
-}: {bans: Array<string | null>, version: string, side: DraftSide, turn: DraftSide | 'end'}) {
+}: {bans: Array<string | null>, version: string, side: DraftSide, turn: DraftSide | 'end' | 'start'}) {
   const displayedBans = side === 'red' ? bans.toReversed() : bans;
   return(
     <div 

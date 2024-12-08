@@ -53,7 +53,7 @@ export default function Draft() {
     sendEvent({
       type: 'HOVER',
       payload: champion,
-      user: draftState.turn
+      user: role ?? draftState.turn
     });
   }
 
@@ -65,7 +65,7 @@ export default function Draft() {
           sendEvent({
             type: 'SELECT',
             payload: {...currentChampion, status: 'selected'},
-            user: draftState.turn
+            user: role ?? draftState.turn
           });
           setCurrentChampion(null);
           setFilter({ role: null, search: ''});
@@ -151,7 +151,16 @@ export default function Draft() {
         </div>
         <div className='flex-1 flex flex-col overflow-hidden'>
           <div className='flex-shrink-0 mb-2'>
-            <DraftSelection onRoleSelect={handleRoleSelect} onSearchChange={handleSearchChange} onConfirm={handleLockIn} state={draftState.phase}/>
+            <DraftSelection 
+              onRoleSelect={handleRoleSelect} 
+              onSearchChange={handleSearchChange} 
+              onConfirm={handleLockIn} 
+              state={
+                draftState.phase == 'ready' ? 
+                draftState.turn == role || draftState.turn == 'start' ? 'ready' : 'waiting' 
+                : draftState.phase
+              }
+            />
           </div>
           <div className='flex-1 overflow-y-auto'>
             <DraftGrid champions={champions} version={version} filter={filter} onChampionSelect={(champion) => handleChampionSelect(champion)} selectedChampion={currentChampion} state={draftState.phase} />

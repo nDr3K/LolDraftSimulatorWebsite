@@ -6,7 +6,7 @@ export default function DraftHeader({
     redTeamName = 'Red',
     timer = null,
     turn
-}: {blueTeamName: string, redTeamName: string, timer: number | null, turn: DraftSide | 'end'}) {
+}: {blueTeamName: string, redTeamName: string, timer: number | null, turn: DraftSide | 'end' | 'start'}) {
 
     return(
       <div className="flex justify-between items-center mb-4">

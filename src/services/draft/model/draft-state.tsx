@@ -4,7 +4,7 @@ import { DraftOptions } from "@/types/draft-options";
 export type DraftState = {
     timer: boolean;
     phase: 'ready' |'ban' | 'pick' | 'end' | 'restart';
-    turn: 'red' | 'blue' | 'end';
+    turn: 'red' | 'blue' | 'end' | 'start';
     game: number;
     chat: Array<string>;
     blueTeam: TeamState;

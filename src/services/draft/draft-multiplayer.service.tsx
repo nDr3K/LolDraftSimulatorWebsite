@@ -4,7 +4,7 @@ import { DraftEvent } from "./types/draft-event";
 
 export class MultiplayerDraftService implements DraftService {
   private ws: WebSocket | null = null;
-  private callback?: (state: DraftState) => void;
+  private subscribers: Array<(state: DraftState) => void> = [];
 
   constructor(gameId: string, role: string) {
     const wsUrl = `ws://localhost:8080/ws/lobby/${gameId}/${role}`;
@@ -15,9 +15,9 @@ export class MultiplayerDraftService implements DraftService {
     };
 
     this.ws.onmessage = (message) => {
-      if (this.callback) {
+      if (message.data) {
         const state: DraftState = JSON.parse(message.data);
-        this.callback(state);
+        this.notifySubscribers(state);
       }
     };
 
@@ -46,11 +46,14 @@ export class MultiplayerDraftService implements DraftService {
     });
   }
 
-  subscribe(callback: (state: DraftState) => void): () => void {
-    this.callback = callback;
+  private notifySubscribers(state: DraftState): void {
+    this.subscribers.forEach(callback => callback(state));
+  }
 
+  subscribe(callback: (state: DraftState) => void): () => void {
+    this.subscribers.push(callback);
     return () => {
-        this.callback = undefined;
+      this.subscribers = this.subscribers.filter(sub => sub !== callback);
     };
   }
 
@@ -59,5 +62,6 @@ export class MultiplayerDraftService implements DraftService {
       this.ws.close();
       this.ws = null;
     }
+    this.subscribers = [];
   }
 }
