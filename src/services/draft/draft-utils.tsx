@@ -40,7 +40,7 @@ export function getInitState(
 }
 
 export function useDraftService(
-    mode: 'solo' | 'multiplayer', 
+    role: string | undefined,
     options: DraftOptions,
     gameId?: string,
     blueTeamName: string = 'blue',
@@ -48,7 +48,7 @@ export function useDraftService(
 ) {
   const [draftService, setDraftService] = useState<DraftService | null>(null);
   const [draftState, setDraftState] = useState<DraftState>(getInitState(
-    mode === 'multiplayer' && gameId ? 'ready' : 'ban',
+    gameId ? 'ready' : 'ban',
     1,
     false,
     'blue',
@@ -58,8 +58,8 @@ export function useDraftService(
   ));
 
   useEffect(() => {
-    const service = mode === 'multiplayer' && gameId
-      ? new MultiplayerDraftService(gameId)
+    const service = gameId && role
+      ? new MultiplayerDraftService(gameId, role)
       : new SoloDraftService(draftState);
 
     const unsubscribe = service.subscribe(setDraftState);
@@ -69,7 +69,7 @@ export function useDraftService(
       unsubscribe();
       service.disconnect();
     };
-  }, [mode, gameId]);
+  }, [gameId]);
 
   const sendEvent = async (event: DraftEvent) => {
     if (draftService) {

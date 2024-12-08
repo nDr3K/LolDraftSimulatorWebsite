@@ -11,11 +11,12 @@ import { useDraftService } from '@/services/draft/draft-utils';
 import { DraftChampion } from '@/types/draft-champion';
 import { Role } from '@/types/role';
 import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 
 export default function Draft() {
   const location = useLocation();
-  const { mode, isFearless, fearlessMode, tournamentBan, blueTeamName, redTeamName, gameId } = location.state || {};
+  const { isFearless, fearlessMode, tournamentBan, blueTeamName, redTeamName } = location.state || {};
+  const { gameId, role } = useParams();
   const [version, setVersion] = useState('');
   const [champions, setChampions] = useState<Array<DraftChampion>>([]);
   const [filter, setFilter] = useState<{ role: Role | null; search: string }>({
@@ -24,7 +25,7 @@ export default function Draft() {
   });
   const [currentChampion, setCurrentChampion] = useState<DraftChampion | null>(null);
   const { draftState, sendEvent } = useDraftService(
-    mode, 
+    role,
     {
       isFearless: isFearless, 
       banPick: isFearless && (fearlessMode == 'standard' || fearlessMode == 'hardcore'), 
@@ -75,7 +76,7 @@ export default function Draft() {
         sendEvent({
           type: 'START',
           payload: null,
-          user: '', //red/blue/userId -> passed from multiplayer
+          user: role ?? '',
         })
         setFilter({ role: null, search: ''});
         break;
@@ -88,7 +89,7 @@ export default function Draft() {
     sendEvent({
       type: 'START',
       payload: switchSide,
-      user: '', //red/blue/userId -> passed from multiplayer
+      user: role ?? '',
     })
   }
 

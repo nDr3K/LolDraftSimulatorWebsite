@@ -1,15 +1,27 @@
 'use client'
 
 import { useState } from 'react'
+import { useNavigate } from "react-router-dom";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { CreateLobbyResponse } from '@/services/lobby/model/create-lobby-response'
+import LobbyUrlButton from './lobby-url-button';
 
 export default function LobbyDialog({ 
   lobby,
   onClose
 }: { lobby: CreateLobbyResponse, onClose: () => void }) {
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(true);
+  const handleNavigate = (url: string) => {
+    const newTab = window.open(url, "_blank", "noopener,noreferrer");
+    
+    if (newTab) {
+      newTab.onload = () => {
+        navigate(url);
+      };
+    }
+  };
 
   const copyAllUrls = () => {
     const blueTeamLink = `Blue Team: ${lobby.blueTeamUrl}`;
@@ -34,33 +46,24 @@ export default function LobbyDialog({
           <DialogTitle>Important URLs</DialogTitle>
         </DialogHeader>
         <div className="grid gap-4 py-4">
-          <a
-            href={lobby.blueTeamUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="bg-blue-700 text-white p-3 rounded-md hover:opacity-80 transition-opacity flex items-center justify-between"
-          >
-            <span className="mr-2">Blue Team:</span>
-            <span className="text-sm opacity-75">{lobby.blueTeamUrl}</span>
-          </a>
-          <a
-            href={lobby.redTeamUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="bg-red-700 text-white p-3 rounded-md hover:opacity-80 transition-opacity flex items-center justify-between"
-          >
-            <span className="mr-2">Red Team:</span>
-            <span className="text-sm opacity-75">{lobby.redTeamUrl}</span>
-          </a>
-          <a
-            href={lobby.spectatorUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="bg-zinc-700 text-white p-3 rounded-md hover:opacity-80 transition-opacity flex items-center justify-between"
-          >
-            <span className="mr-2">Spectators:</span>
-            <span className="text-sm opacity-75">{lobby.spectatorUrl}</span>
-          </a>
+          <LobbyUrlButton
+            label="Blue Team:"
+            url={lobby.blueTeamUrl}
+            className="bg-blue-700 text-white"
+            onClick={() => handleNavigate(lobby.blueTeamUrl)}
+          />
+          <LobbyUrlButton
+            label="Red Team:"
+            url={lobby.redTeamUrl}
+            className="bg-red-700 text-white"
+            onClick={() => handleNavigate(lobby.redTeamUrl)}
+          />
+          <LobbyUrlButton
+            label="Spectators:"
+            url={lobby.spectatorUrl}
+            className="bg-zinc-700 text-white"
+            onClick={() => handleNavigate(lobby.spectatorUrl)}
+          />
         </div>
         <Button onClick={copyAllUrls} className="w-full">
           Copy All

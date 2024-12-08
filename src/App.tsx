@@ -32,7 +32,11 @@ const router = createBrowserRouter([
       {
         path: "/draft",
         element: <Draft />,
-      }
+      },
+      {
+        path: "/draft/:gameId/:role",
+        element: <Draft />,
+      },
     ],
     errorElement: <div>404 - Page Not Found</div>
   },
