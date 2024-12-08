@@ -5,7 +5,7 @@ import classNames from "classnames";
 export default function DraftPick({champion = null, side = 'blue', picking = false}: {champion: DraftChampion | null, side: DraftSide, picking: boolean}) {
     const imageUrl = champion?.id
     ? `https://ddragon.leagueoflegends.com/cdn/img/champion/centered/${champion.id == 'Fiddlesticks' ? 'FiddleSticks' : champion.id}_0.jpg`
-    : 'src/assets/placeholder.png';
+    : '/src/assets/placeholder.png';
     return(
       <div 
         className={classNames(
