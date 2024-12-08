@@ -15,7 +15,7 @@ import { useLocation } from 'react-router-dom';
 
 export default function Draft() {
   const location = useLocation();
-  const { mode, isFearless, banPick, keepBan, tournamentBan } = location.state || {};
+  const { mode, isFearless, fearlessMode, tournamentBan, blueTeamName, redTeamName, gameId } = location.state || {};
   const [version, setVersion] = useState('');
   const [champions, setChampions] = useState<Array<DraftChampion>>([]);
   const [filter, setFilter] = useState<{ role: Role | null; search: string }>({
@@ -23,7 +23,18 @@ export default function Draft() {
     search: '',
   });
   const [currentChampion, setCurrentChampion] = useState<DraftChampion | null>(null);
-  const { draftState, sendEvent } = useDraftService(mode, {isFearless: isFearless, banPick: banPick, keepBan: keepBan, tournamentBan: tournamentBan});
+  const { draftState, sendEvent } = useDraftService(
+    mode, 
+    {
+      isFearless: isFearless, 
+      banPick: isFearless && (fearlessMode == 'standard' || fearlessMode == 'hardcore'), 
+      keepBan: isFearless && fearlessMode == 'hardcore', 
+      tournamentBan: tournamentBan,
+    },
+    gameId,
+    blueTeamName,
+    redTeamName
+  );
 
   const handleRoleSelect = (role: Role | null) => {
     setFilter((prev) => ({ ...prev, role }));
@@ -131,7 +142,7 @@ export default function Draft() {
 
   return(
     <>
-      <DraftHeader blueTeamName='Blue' redTeamName='Red' timer={draftState.timer ? 30 : null} turn={draftState.turn} />
+      <DraftHeader blueTeamName={draftState.blueTeam.name} redTeamName={draftState.redTeam.name} timer={draftState.timer ? 30 : null} turn={draftState.turn} />
       <div className='flex justify-between items-stretch space-x-4 px-4 h-[43rem]'>
         <div>
           <DraftBan bans={draftState.blueTeam.bans} version={version} side='blue' turn={draftState.phase == 'ban' ? draftState.turn : 'end'} />

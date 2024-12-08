@@ -1,8 +1,10 @@
+export type fearlessMode = 'soft' | 'standard' | 'hardcore';
+
 export type LobbyOptions = {
   blueTeamName: string;
   redTeamName: string;
   isFearless: boolean;
-  fearlessMode: 'soft' | 'standard' | 'hardcore';
+  fearlessMode: fearlessMode;
   tournamentBan: boolean;
 }
 
