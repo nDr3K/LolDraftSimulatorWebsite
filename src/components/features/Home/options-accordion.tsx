@@ -2,45 +2,29 @@ import { useState } from "react";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label} from "@/components/ui/label";
-import { DraftOptions } from "@/types/draft-options";
+import { LobbyOptions } from "@/types/draft-options";
 
-export default function OptionsAccordion({ onOptionsChange }: { onOptionsChange: (options: DraftOptions) => void}) {
-  const [isFearless, setIsFearless] = useState(true);
-  const [banPick, setBanPick] = useState(true);
-  const [keepBan, setKeepBan] = useState(false);
-  const [tournamentBan, setTournamentBan] = useState(true);
+export default function OptionsAccordion({ onOptionsChange }: { onOptionsChange: (options: LobbyOptions) => void}) {
+  const [options, setOptions] = useState<LobbyOptions>({
+    isFearless: true,
+    banPick: true,
+    keepBan: false,
+    tournamentBan: true,
+    blueTeamName: 'Blue Team',
+    redTeamName: 'Red Team',
+  });
 
-  const handleOptionChange = (option: keyof DraftOptions, value: boolean) => {
-    let _isFearless = isFearless;
-    let _banPick = banPick;
-    let _keepBan = keepBan;
-    let _tournamentBan = tournamentBan;
-
-    if (option === 'isFearless') {
-      _isFearless = value;
-      setIsFearless(value);
-      if (!value) {
-        setBanPick(false);
-        setKeepBan(false);
-        _banPick = false;
-        _keepBan = false;
-      }
-    } else if (option === 'banPick') {
-      setBanPick(value);
-      _banPick = value;
-    } else if (option === 'keepBan') {
-      setKeepBan(value);
-      _keepBan = value;
-    } else if (option === 'tournamentBan') {
-      setTournamentBan(value);
-      _tournamentBan = value;
-    }
-
-    onOptionsChange({
-      isFearless: _isFearless,
-      banPick: _banPick,
-      keepBan: _keepBan,
-      tournamentBan: _tournamentBan
+  const handleOptionChange = (option: keyof LobbyOptions, value: boolean | string) => {
+    setOptions((prevOptions) => {
+      const updatedOptions = {
+        ...prevOptions,
+        [option]: value,
+        ...(option === 'isFearless' && typeof value === 'boolean' && !value
+          ? { banPick: false, keepBan: false }
+          : {}),
+      };
+      onOptionsChange(updatedOptions);
+      return updatedOptions;
     });
   };
 
@@ -53,7 +37,7 @@ export default function OptionsAccordion({ onOptionsChange }: { onOptionsChange:
             <div className="flex items-center space-x-2">
               <Checkbox 
                 id="normal" 
-                checked={!isFearless} 
+                checked={!options.isFearless} 
                 onCheckedChange={(checked) => handleOptionChange('isFearless', !checked)}
               />
               <Label htmlFor="normal">Normal</Label>
@@ -61,18 +45,18 @@ export default function OptionsAccordion({ onOptionsChange }: { onOptionsChange:
             <div className="flex items-center space-x-2">
               <Checkbox 
                 id="fearless" 
-                checked={isFearless} 
+                checked={options.isFearless} 
                 onCheckedChange={(checked) => handleOptionChange('isFearless', checked as boolean)}
                />
               <Label htmlFor="fearless">Fearless</Label>
             </div>
           </div>
-          {isFearless && (
+          {options.isFearless && (
             <div className="pl-4 space-y-4 mt-4">
               <div className="flex items-center space-x-2">
                 <Checkbox 
                   id="ban-pick" 
-                  checked={banPick}
+                  checked={options.banPick}
                   onCheckedChange={(checked) => handleOptionChange('banPick', checked as boolean)}
                 />
                 <Label htmlFor="ban-pick">Ban pick for both teams</Label>
@@ -80,7 +64,7 @@ export default function OptionsAccordion({ onOptionsChange }: { onOptionsChange:
               <div className="flex items-center space-x-2">
                 <Checkbox 
                   id="keep-ban" 
-                  checked={keepBan}
+                  checked={options.keepBan}
                   onCheckedChange={(checked) => handleOptionChange('keepBan', checked as boolean)}
                 />
                 <Label htmlFor="keep-ban">Keep ban</Label>
@@ -91,7 +75,7 @@ export default function OptionsAccordion({ onOptionsChange }: { onOptionsChange:
             <div className="flex items-center space-x-2">
               <Checkbox 
                 id="tournamentBan" 
-                checked={tournamentBan} 
+                checked={options.tournamentBan} 
                 onCheckedChange={(checked) => handleOptionChange('tournamentBan', checked as boolean)}
               />
               <Label htmlFor="tournamentBan">Tournament Bans</Label>
@@ -99,10 +83,30 @@ export default function OptionsAccordion({ onOptionsChange }: { onOptionsChange:
             <div className="flex items-center space-x-2">
               <Checkbox 
                 id="draftBan" 
-                checked={!tournamentBan} 
+                checked={!options.tournamentBan} 
                 onCheckedChange={(checked) => handleOptionChange('tournamentBan', !checked)}
               />
               <Label htmlFor="draftBan">Draft Bans</Label>
+            </div>
+          </div>
+          <div className="flex flex-col mt-4 gap-2">
+            <div className="w-full flex justify-between items-center space-x-2 pe-4">
+              <Label htmlFor="blueTeamName">Blue Team Name:</Label>
+              <input
+                type="text"
+                value={options.blueTeamName}
+                className="bg-zinc-800 text-white rounded px-4 py-1 focus:outline-none focus:ring-1 focus:ring-amber-500"
+                onChange={(e) => handleOptionChange('blueTeamName', e.target.value)}
+              />
+            </div>
+            <div className="w-full flex justify-between items-center space-x-2 pe-4">
+              <Label htmlFor="redTeamName">Red Team Name:</Label>
+              <input
+                type="text"
+                value={options.redTeamName}
+                className="bg-zinc-800 text-white rounded px-4 py-1 focus:outline-none focus:ring-1 focus:ring-amber-500"
+                onChange={(e) => handleOptionChange('redTeamName' ,e.target.value)}
+              />
             </div>
           </div>
         </AccordionContent>

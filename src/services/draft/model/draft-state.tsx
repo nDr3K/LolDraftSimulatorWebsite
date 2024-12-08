@@ -1,5 +1,5 @@
 import { DraftChampion } from "@/types/draft-champion";
-import {DraftOptions} from "@/types/draft-options";
+import { DraftOptions } from "@/types/draft-options";
 
 export type DraftState = {
     timer: boolean;

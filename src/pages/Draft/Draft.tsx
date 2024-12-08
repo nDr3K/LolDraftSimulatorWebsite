@@ -160,16 +160,16 @@ export default function Draft() {
       </div>
 
       <Dialog open={draftState.phase == 'restart'}>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle className='text-center'>Do you want to swap side?</DialogTitle>
-              <DialogDescription className='flex justify-between px-4 py-2'>
-                <Button className="w-20 hover:cursor-pointer" onClick={() => handleStartNewDraft(true)} asChild><span>Yes</span></Button>
-                <Button className="w-20 hover:cursor-pointer" onClick={() => handleStartNewDraft(false)} asChild><span>No</span></Button>
-              </DialogDescription>
-            </DialogHeader>
-          </DialogContent>
-        </Dialog>    
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className='text-center'>Do you want to swap side?</DialogTitle>
+            <DialogDescription className='flex justify-between px-4 py-2'>
+              <Button className="w-20 hover:cursor-pointer" onClick={() => handleStartNewDraft(true)} asChild><span>Yes</span></Button>
+              <Button className="w-20 hover:cursor-pointer" onClick={() => handleStartNewDraft(false)} asChild><span>No</span></Button>
+            </DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>    
     </>
   )
 }

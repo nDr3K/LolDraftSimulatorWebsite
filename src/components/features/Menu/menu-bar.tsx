@@ -1,6 +1,6 @@
 import { Link, Outlet } from "react-router-dom";
 import { Button } from '@/components/ui/button'
-import { ThemeToggle } from './theme-toggle';
+// import { ThemeToggle } from './theme-toggle';
 import { AvatarDropDown } from "./avatar-dropdown";
 
 export default function MenuBar({ isLoggedIn = false, userEmail = '' }: { isLoggedIn?: boolean, userEmail?: string }) {
@@ -28,7 +28,7 @@ export default function MenuBar({ isLoggedIn = false, userEmail = '' }: { isLogg
                   </Button>
                 </div>
               )}
-              <ThemeToggle />
+              {/* <ThemeToggle /> */}
             </nav>
           </div>
         </div>
