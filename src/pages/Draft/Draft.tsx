@@ -184,7 +184,7 @@ export default function Draft() {
         <DraftDisabled bans={draftState.redTeam.previousBans} version={version} side='red' />
       </div>
 
-      <Dialog open={draftState.phase == 'restart'}>
+      <Dialog open={draftState.phase == 'restart' && (!role || draftState.turn == role)}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle className='text-center'>Do you want to swap side?</DialogTitle>
@@ -194,7 +194,7 @@ export default function Draft() {
             </DialogDescription>
           </DialogHeader>
         </DialogContent>
-      </Dialog>    
+      </Dialog>
     </>
   )
 }

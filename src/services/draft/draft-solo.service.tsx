@@ -47,12 +47,17 @@ export class SoloDraftService implements DraftService {
         case 'end':
           this.draftState = {
             ...this.draftState,
-            phase: 'restart'
+            phase: 'restart',
           }
           break;
         case 'restart':
           if (this.draftState.game < 5)
             this.handleRestart(event.flag || false)
+          else
+            this.draftState = {
+              ...this.draftState,
+              phase: 'over'
+          }
           break;
         default:
           break;

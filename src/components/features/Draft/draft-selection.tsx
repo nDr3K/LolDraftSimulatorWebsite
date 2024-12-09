@@ -1,4 +1,4 @@
-import {Button} from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { Role } from "@/types/role";
 import { useState } from "react";
 
@@ -43,15 +43,18 @@ export default function DraftSelection({
         ))}
       </div>
       <div className="flex items-center justify-center w-full">
-        <Button className="bg-zinc-600 text-zinc-400 hover:text-black w-24" onClick={() => onConfirm()}>
-        {{
-          pick: 'Lock in',
-          ban: 'Ban',
-          end: 'Start New',
-          ready: 'Ready',
-          waiting: 'Waiting...'
-        }[state] || ''}
-        </Button>
+        {state != 'over' && 
+          <Button className="bg-zinc-600 text-zinc-400 hover:text-black w-24" onClick={() => onConfirm()}>
+            {{
+              pick: 'Lock in',
+              ban: 'Ban',
+              end: 'Start New',
+              ready: 'Ready',
+              waiting: 'Waiting...',
+              restart: 'Waiting...',
+            }[state] || ''}
+          </Button>
+        }
       </div>
       <div className="me-2">
         <input
