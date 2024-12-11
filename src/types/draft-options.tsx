@@ -6,6 +6,7 @@ export type LobbyOptions = {
   isFearless: boolean;
   fearlessMode: fearlessMode;
   tournamentBan: boolean;
+  hasTimer: boolean;
 }
 
 export type DraftOptions = {
@@ -13,4 +14,5 @@ export type DraftOptions = {
   banPick: boolean;
   keepBan: boolean;
   tournamentBan: boolean;
+  hasTimer: boolean;
 };

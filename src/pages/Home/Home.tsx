@@ -14,7 +14,8 @@ export default function Home() {
     fearlessMode: 'standard',
     tournamentBan: true,
     blueTeamName: 'Blue Team',
-    redTeamName: 'Red Team'
+    redTeamName: 'Red Team',
+    hasTimer: false,
   });
   const [lobby, setLobby] = useState<CreateLobbyResponse | null>(null);
   const { createLobby } = useLobbyService();
@@ -36,7 +37,8 @@ export default function Home() {
             banPick: draftOptions.isFearless && (draftOptions.fearlessMode == 'standard' || draftOptions.fearlessMode == 'hardcore'),
             isFearless: draftOptions.isFearless,
             keepBan: draftOptions.isFearless && draftOptions.fearlessMode == 'hardcore',
-            tournamentBan: draftOptions.tournamentBan
+            tournamentBan: draftOptions.tournamentBan,
+            hasTimer: draftOptions.hasTimer
           }
         });
         

@@ -15,7 +15,7 @@ import { useLocation, useParams } from 'react-router-dom';
 
 export default function Draft() {
   const location = useLocation();
-  const { isFearless, fearlessMode, tournamentBan, blueTeamName, redTeamName } = location.state || {};
+  const { isFearless, fearlessMode, tournamentBan, blueTeamName, redTeamName, hasTimer } = location.state || {};
   const { gameId, role } = useParams();
   const [version, setVersion] = useState('');
   const [champions, setChampions] = useState<Array<DraftChampion>>([]);
@@ -31,6 +31,7 @@ export default function Draft() {
       banPick: isFearless && (fearlessMode == 'standard' || fearlessMode == 'hardcore'), 
       keepBan: isFearless && fearlessMode == 'hardcore', 
       tournamentBan: tournamentBan,
+      hasTimer: hasTimer
     },
     gameId,
     blueTeamName,
@@ -147,7 +148,7 @@ export default function Draft() {
 
   return(
     <>
-      <DraftHeader blueTeamName={draftState.blueTeam.name} redTeamName={draftState.redTeam.name} timer={draftState.timer ? 30 : null} turn={draftState.turn} />
+      <DraftHeader blueTeamName={draftState.blueTeam.name} redTeamName={draftState.redTeam.name} timer={draftState.hasTimer ? draftState.timer : null} turn={draftState.turn} />
       <div className='flex justify-between items-stretch space-x-4 px-4 h-[43rem]'>
         <div>
           <DraftBan bans={draftState.blueTeam.bans} version={version} side='blue' turn={draftState.phase == 'ban' ? draftState.turn : 'end'} />

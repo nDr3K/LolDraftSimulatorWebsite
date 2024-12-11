@@ -9,14 +9,15 @@ import { DraftOptions } from '@/types/draft-options';
 export function getInitState(
   phase: 'ready' | 'ban',
   game: number,
-  timer: boolean,
+  hasTimer: boolean,
   turn: 'red' | 'blue',
   blueTeamName: string,
   redTeamName: string,
   options: DraftOptions
 ): DraftState {
   return {
-    timer: timer,
+    timer: hasTimer ? 30 : 0,
+    hasTimer: hasTimer,
     turn: turn,
     chat: [],
     phase: phase,

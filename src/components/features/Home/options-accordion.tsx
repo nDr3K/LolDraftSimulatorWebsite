@@ -12,6 +12,7 @@ export default function OptionsAccordion({ onOptionsChange }: { onOptionsChange:
     tournamentBan: true,
     blueTeamName: 'Blue Team',
     redTeamName: 'Red Team',
+    hasTimer: false,
   });
 
   const handleOptionChange = (option: keyof LobbyOptions, value: boolean | string) => {
@@ -69,6 +70,15 @@ export default function OptionsAccordion({ onOptionsChange }: { onOptionsChange:
                 id="tournamentBan" 
                 checked={options.tournamentBan} 
                 onCheckedChange={(checked) => handleOptionChange('tournamentBan', checked)}
+              />
+            </div>
+
+            <div className="flex items-center justify-between">
+              <Label htmlFor="hasTimer">Timer (only in multiplayer)</Label>
+              <Switch 
+                id="hasTimer" 
+                checked={options.hasTimer} 
+                onCheckedChange={(checked) => handleOptionChange('hasTimer', checked)}
               />
             </div>
 

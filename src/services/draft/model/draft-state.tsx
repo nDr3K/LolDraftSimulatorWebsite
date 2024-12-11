@@ -2,7 +2,8 @@ import { DraftChampion } from "@/types/draft-champion";
 import { DraftOptions } from "@/types/draft-options";
 
 export type DraftState = {
-    timer: boolean;
+    timer: number;
+    hasTimer: boolean;
     phase: 'ready' |'ban' | 'pick' | 'end' | 'restart' | 'over';
     turn: 'red' | 'blue' | 'end' | 'start';
     game: number;
