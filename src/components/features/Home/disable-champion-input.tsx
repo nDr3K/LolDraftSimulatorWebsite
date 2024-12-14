@@ -3,13 +3,13 @@ import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { X } from 'lucide-react'
 import { DraftChampion } from '@/types/draft-champion'
-import {Label} from '@/components/ui/label'
+import { Label } from '@/components/ui/label'
 
 export default function DisableChampionInput({
   champions = [],
   disabledChampions,
   setDisabledChampions,
-}: {champions: Array<DraftChampion>, disabledChampions: Array<string>, setDisabledChampions: React.Dispatch<React.SetStateAction<Array<string>>>}) {
+}: {champions: Array<DraftChampion>, disabledChampions: Array<string>, setDisabledChampions: (updater: (prev: string[]) => string[]) => void}) {
   const [searchTerm, setSearchTerm] = useState('')
   const [suggestions, setSuggestions] = useState<string[]>([])
 

@@ -5,7 +5,7 @@ import { LobbyOptions } from "@/types/draft-options";
 import { Switch } from "@/components/ui/switch";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import DisableChampionInput from "./disable-champion-input";
-import {DraftChampion} from "@/types/draft-champion";
+import { DraftChampion } from "@/types/draft-champion";
 
 export default function OptionsAccordion({ onOptionsChange, champions }: { onOptionsChange: (options: LobbyOptions) => void, champions: Array<DraftChampion>}) {
   const [options, setOptions] = useState<LobbyOptions>({
@@ -15,15 +15,26 @@ export default function OptionsAccordion({ onOptionsChange, champions }: { onOpt
     blueTeamName: 'Blue Team',
     redTeamName: 'Red Team',
     hasTimer: false,
-    disabledChampions: []
+    disabledChampionIds: []
   });
-  const [disabledChampions, setDisabledChampions] = useState<Array<string>>([]);
 
   const handleOptionChange = (option: keyof LobbyOptions, value: boolean | string) => {
     setOptions((prevOptions) => {
       const updatedOptions = {
         ...prevOptions,
         [option]: value,
+      };
+      onOptionsChange(updatedOptions);
+      return updatedOptions;
+    });
+  };
+
+  const setDisabledChampions = (updater: (prev: string[]) => string[]) => {
+    setOptions((prevOptions) => {
+      const updatedDisabledChampionIds = updater(prevOptions.disabledChampionIds);
+      const updatedOptions = {
+        ...prevOptions,
+        disabledChampionIds: updatedDisabledChampionIds
       };
       onOptionsChange(updatedOptions);
       return updatedOptions;
@@ -109,7 +120,7 @@ export default function OptionsAccordion({ onOptionsChange, champions }: { onOpt
             </div>
 
             <div className="w-full">
-              <DisableChampionInput champions={champions} disabledChampions={disabledChampions} setDisabledChampions={setDisabledChampions} />
+              <DisableChampionInput champions={champions} disabledChampions={options.disabledChampionIds} setDisabledChampions={setDisabledChampions} />
             </div>
           </div>
         </AccordionContent>

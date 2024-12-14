@@ -18,7 +18,7 @@ export default function Home() {
     blueTeamName: 'Blue Team',
     redTeamName: 'Red Team',
     hasTimer: false,
-    disabledChampions: []
+    disabledChampionIds: []
   });
   const [lobby, setLobby] = useState<CreateLobbyResponse | null>(null);
   const [champions, setChampions] = useState<Array<DraftChampion>>([]);
@@ -44,7 +44,8 @@ export default function Home() {
             tournamentBan: draftOptions.tournamentBan,
             hasTimer: draftOptions.hasTimer
           },
-          champions: champions
+          champions: champions.flatMap(c => draftOptions.disabledChampionIds.includes(c.id) ? {...c, status: 'disabled'} : c),
+          disabledChampionIds: draftOptions.disabledChampionIds
         });
         
         setLobby(lobbyResponse);
@@ -61,7 +62,7 @@ export default function Home() {
         const championsData = await ChampionService.fetchChampions();
         const champions = ChampionService.transformChampions(
           championsData,
-          new Set(draftOptions.disabledChampions),
+          new Set(draftOptions.disabledChampionIds),
           null,
           null
         );
@@ -72,7 +73,7 @@ export default function Home() {
     };
 
     loadChampions();
-}, [draftOptions.disabledChampions]);
+}, [draftOptions.disabledChampionIds]);
 
   return (
     <>

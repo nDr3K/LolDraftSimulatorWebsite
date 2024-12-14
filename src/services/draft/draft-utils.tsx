@@ -13,7 +13,8 @@ export function getInitState(
   turn: 'red' | 'blue',
   blueTeamName: string,
   redTeamName: string,
-  options: DraftOptions
+  options: DraftOptions,
+  disabledChampionIds: Array<string>
 ): DraftState {
   return {
     timer: hasTimer ? 30 : 0,
@@ -36,7 +37,8 @@ export function getInitState(
       previousBans: [],
       previousPicks: []
     },
-    options: options
+    options: options,
+    disabledChampionIds: disabledChampionIds
   }
 }
 
@@ -45,7 +47,8 @@ export function useDraftService(
     options: DraftOptions,
     gameId?: string,
     blueTeamName: string = 'blue',
-    redTeamName: string = 'red'
+    redTeamName: string = 'red',
+    disabledChampionIds: Array<string> = []
 ) {
   const [draftService, setDraftService] = useState<DraftService | null>(null);
   const [draftState, setDraftState] = useState<DraftState>(getInitState(
@@ -55,7 +58,8 @@ export function useDraftService(
     'blue',
     blueTeamName,
     redTeamName,
-    options
+    options,
+    disabledChampionIds
   ));
 
   useEffect(() => {

@@ -15,7 +15,7 @@ import { useLocation, useParams } from 'react-router-dom';
 
 export default function Draft() {
   const location = useLocation();
-  const { isFearless, fearlessMode, tournamentBan, blueTeamName, redTeamName, hasTimer } = location.state || {};
+  const { isFearless, fearlessMode, tournamentBan, blueTeamName, redTeamName, hasTimer, disabledChampionIds } = location.state || {};
   const { gameId, role } = useParams();
   const [version, setVersion] = useState('');
   const [champions, setChampions] = useState<Array<DraftChampion>>([]);
@@ -35,7 +35,8 @@ export default function Draft() {
     },
     gameId,
     blueTeamName,
-    redTeamName
+    redTeamName,
+    disabledChampionIds
   );
 
   const handleRoleSelect = (role: Role | null) => {
@@ -121,7 +122,8 @@ export default function Draft() {
           ...draftState.redTeam.picks.filter(pick => pick?.status === 'selected').map(pick => pick!.id),
           ...draftState.blueTeam.previousBans,
           ...draftState.redTeam.previousBans,
-          ...bannedPrevPicks
+          ...bannedPrevPicks,
+          ...draftState.disabledChampionIds
         ].filter(Boolean));
 
         const transformedChampions = ChampionService.transformChampions(
@@ -143,7 +145,8 @@ export default function Draft() {
     draftState.redTeam.bans, 
     draftState.blueTeam.picks, 
     draftState.redTeam.picks, 
-    draftState.phase
+    draftState.phase,
+    draftState.disabledChampionIds
   ]);
 
   return(

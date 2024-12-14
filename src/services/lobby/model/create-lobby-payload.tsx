@@ -6,4 +6,5 @@ export type CreateLobbyPayload = {
   redTeamName: string;
   options: DraftOptions;
   champions: Array<DraftChampion>;
+  disabledChampionIds: Array<string>;
 }

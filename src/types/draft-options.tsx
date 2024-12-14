@@ -7,7 +7,7 @@ export type LobbyOptions = {
   fearlessMode: fearlessMode;
   tournamentBan: boolean;
   hasTimer: boolean;
-  disabledChampions: Array<string>;
+  disabledChampionIds: Array<string>;
 }
 
 export type DraftOptions = {

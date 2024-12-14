@@ -7,10 +7,11 @@ export type DraftState = {
     phase: 'ready' |'ban' | 'pick' | 'end' | 'restart' | 'over';
     turn: 'red' | 'blue' | 'end' | 'start';
     game: number;
-    chat: Array<string>;
+    chat: Array<string>; //{user, message}
     blueTeam: TeamState;
     redTeam: TeamState;
     options: DraftOptions;
+    disabledChampionIds: Array<string>;
 }
 
 export type TeamState = {

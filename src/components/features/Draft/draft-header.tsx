@@ -1,4 +1,4 @@
-import {DraftSide} from "@/types/draft-side";
+import { DraftSide } from "@/types/draft-side";
 import classNames from "classnames";
 
 export default function DraftHeader({ 
