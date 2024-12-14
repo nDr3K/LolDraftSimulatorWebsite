@@ -4,8 +4,10 @@ import { Label} from "@/components/ui/label";
 import { LobbyOptions } from "@/types/draft-options";
 import { Switch } from "@/components/ui/switch";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import DisableChampionInput from "./disable-champion-input";
+import {DraftChampion} from "@/types/draft-champion";
 
-export default function OptionsAccordion({ onOptionsChange }: { onOptionsChange: (options: LobbyOptions) => void}) {
+export default function OptionsAccordion({ onOptionsChange, champions }: { onOptionsChange: (options: LobbyOptions) => void, champions: Array<DraftChampion>}) {
   const [options, setOptions] = useState<LobbyOptions>({
     isFearless: true,
     fearlessMode: 'standard',
@@ -13,7 +15,9 @@ export default function OptionsAccordion({ onOptionsChange }: { onOptionsChange:
     blueTeamName: 'Blue Team',
     redTeamName: 'Red Team',
     hasTimer: false,
+    disabledChampions: []
   });
+  const [disabledChampions, setDisabledChampions] = useState<Array<string>>([]);
 
   const handleOptionChange = (option: keyof LobbyOptions, value: boolean | string) => {
     setOptions((prevOptions) => {
@@ -32,7 +36,7 @@ export default function OptionsAccordion({ onOptionsChange }: { onOptionsChange:
         <AccordionTrigger>Advanced Options</AccordionTrigger>
         <AccordionContent>
           <div className="space-y-4">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between px-1">
               <Label htmlFor="fearless">Fearless</Label>
               <Switch 
                 id="fearless" 
@@ -41,7 +45,7 @@ export default function OptionsAccordion({ onOptionsChange }: { onOptionsChange:
               />
             </div>
             
-            <div className={options.isFearless ? '' : 'opacity-50'}>
+            <div className={options.isFearless ? 'px-1' : 'opacity-50 px-1'}>
               <Label className="mb-2 block">Fearless Mode:</Label>
               <RadioGroup 
                 className="flex space-x-4" 
@@ -49,22 +53,22 @@ export default function OptionsAccordion({ onOptionsChange }: { onOptionsChange:
                 onValueChange={(value) => handleOptionChange('fearlessMode', value)}
                 disabled={!options.isFearless}
               >
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-2 px-1">
                   <RadioGroupItem value="soft" id="soft" />
                   <Label htmlFor="soft">Soft</Label>
                 </div>
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-2 px-1">
                   <RadioGroupItem value="standard" id="standard" />
                   <Label htmlFor="standard">Standard</Label>
                 </div>
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-2 px-1">
                   <RadioGroupItem value="hardcore" id="hardcore" />
                   <Label htmlFor="hardcore">Hardcore</Label>
                 </div>
               </RadioGroup>
             </div>
 
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between px-1">
               <Label htmlFor="tournamentBan">Tournament Bans</Label>
               <Switch 
                 id="tournamentBan" 
@@ -73,7 +77,7 @@ export default function OptionsAccordion({ onOptionsChange }: { onOptionsChange:
               />
             </div>
 
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between px-1">
               <Label htmlFor="hasTimer">Timer (only in multiplayer)</Label>
               <Switch 
                 id="hasTimer" 
@@ -82,7 +86,7 @@ export default function OptionsAccordion({ onOptionsChange }: { onOptionsChange:
               />
             </div>
 
-            <div className="w-full flex justify-between items-center space-x-2">
+            <div className="w-full flex justify-between items-center space-x-2 px-1">
               <Label htmlFor="blueTeamName">Blue Team Name:</Label>
               <input
                 type="text"
@@ -93,7 +97,7 @@ export default function OptionsAccordion({ onOptionsChange }: { onOptionsChange:
               />
             </div>
 
-            <div className="w-full flex justify-between items-center space-x-2">
+            <div className="w-full flex justify-between items-center space-x-2 px-1">
               <Label htmlFor="redTeamName">Red Team Name:</Label>
               <input
                 type="text"
@@ -102,6 +106,10 @@ export default function OptionsAccordion({ onOptionsChange }: { onOptionsChange:
                 className="bg-zinc-800 text-white rounded px-4 py-1 focus:outline-none focus:ring-1 focus:ring-amber-500"
                 onChange={(e) => handleOptionChange('redTeamName', e.target.value)}
               />
+            </div>
+
+            <div className="w-full">
+              <DisableChampionInput champions={champions} disabledChampions={disabledChampions} setDisabledChampions={setDisabledChampions} />
             </div>
           </div>
         </AccordionContent>

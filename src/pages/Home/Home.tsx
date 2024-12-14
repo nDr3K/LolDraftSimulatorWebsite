@@ -18,10 +18,10 @@ export default function Home() {
     blueTeamName: 'Blue Team',
     redTeamName: 'Red Team',
     hasTimer: false,
+    disabledChampions: []
   });
   const [lobby, setLobby] = useState<CreateLobbyResponse | null>(null);
   const [champions, setChampions] = useState<Array<DraftChampion>>([]);
-  const [disabledChampions, setDisabledChampions] = useState<Set<string>>(new Set([]));
   const { createLobby } = useLobbyService();
   
   const handleCardClick = async (mode: 'solo' | 'multiplayer') => {
@@ -61,7 +61,7 @@ export default function Home() {
         const championsData = await ChampionService.fetchChampions();
         const champions = ChampionService.transformChampions(
           championsData,
-          disabledChampions,
+          new Set(draftOptions.disabledChampions),
           null,
           null
         );
@@ -72,7 +72,7 @@ export default function Home() {
     };
 
     loadChampions();
-}, [disabledChampions]);
+}, [draftOptions.disabledChampions]);
 
   return (
     <>
@@ -108,7 +108,7 @@ export default function Home() {
             </Card>
           </div>
         </div>
-        <OptionsAccordion onOptionsChange={setDraftOptions}/>
+        <OptionsAccordion onOptionsChange={setDraftOptions} champions={champions} />
       </div>
 
       {lobby && <LobbyDialog lobby={lobby} onClose={() => setLobby(null)} />}
