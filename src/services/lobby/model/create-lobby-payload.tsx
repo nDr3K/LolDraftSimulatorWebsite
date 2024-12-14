@@ -1,4 +1,4 @@
-import {DraftChampion} from "@/types/draft-champion";
+import { DraftChampion } from "@/types/draft-champion";
 import { DraftOptions } from "@/types/draft-options";
 
 export type CreateLobbyPayload = {
