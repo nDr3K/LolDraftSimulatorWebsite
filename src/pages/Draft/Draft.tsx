@@ -164,7 +164,8 @@ export default function Draft() {
               onSearchChange={handleSearchChange} 
               onConfirm={handleLockIn} 
               state={
-                draftState.phase == 'ready' ? 
+                role == 'spectator' ? 'none'
+                : draftState.phase == 'ready' ? 
                 draftState.turn == role || draftState.turn == 'start' ? 'ready' : 'waiting' 
                 : draftState.phase
               }

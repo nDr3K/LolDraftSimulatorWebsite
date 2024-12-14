@@ -45,7 +45,7 @@ export default function DraftSelection({
         ))}
       </div>
       <div className="flex items-center justify-center w-full">
-        {state != 'over' && 
+        {state != 'over' && state != 'none' && 
           <Button className="bg-zinc-600 text-zinc-400 hover:text-black w-24" onClick={() => onConfirm()} disabled={!enabled}>
             {{
               pick: 'Lock in',
