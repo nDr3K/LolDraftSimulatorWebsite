@@ -59,7 +59,7 @@ class ChampionService implements IChampionService {
     championsData: Record<string, DataChampion>,
     disabledChampionIds: Set<string | null>,
     currentChampion: DraftChampion | null,
-    draftPhase: string
+    draftPhase: string | null
   ): Array<DraftChampion> {
     const transformedChampions: Array<DraftChampion> = Object.values(championsData).map((champion: DataChampion) => ({
       id: champion.id,
@@ -74,7 +74,7 @@ class ChampionService implements IChampionService {
 
     transformedChampions.sort((a, b) => a.name.localeCompare(b.name));
 
-    if (draftPhase !== 'pick') {
+    if (draftPhase && draftPhase !== 'pick') {
       transformedChampions.unshift({ id: 'none', name: 'none', role: [], status: 'none' });
     }
 

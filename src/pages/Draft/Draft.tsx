@@ -165,6 +165,9 @@ export default function Draft() {
                 draftState.turn == role || draftState.turn == 'start' ? 'ready' : 'waiting' 
                 : draftState.phase
               }
+              enabled={
+                role ? (draftState.turn == role || draftState.turn == 'start') && draftState.timer > -2 : true
+              }
             />
           </div>
           <div className='flex-1 overflow-y-auto'>

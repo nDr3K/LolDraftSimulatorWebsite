@@ -6,12 +6,14 @@ export default function DraftSelection({
   onRoleSelect,
   onSearchChange,
   onConfirm,
-  state
+  state,
+  enabled = true
 }: {
   onRoleSelect: (role: Role | null) => void;
   onSearchChange: (search: string) => void;
   onConfirm: () => void;
   state: string;
+  enabled: boolean;
 }) {
   const roles: Role[] = ['top', 'jungle', 'mid', 'bot', 'support'];
   const [selectedRole, setSelectedRole] = useState<Role | null>(null);
@@ -44,7 +46,7 @@ export default function DraftSelection({
       </div>
       <div className="flex items-center justify-center w-full">
         {state != 'over' && 
-          <Button className="bg-zinc-600 text-zinc-400 hover:text-black w-24" onClick={() => onConfirm()}>
+          <Button className="bg-zinc-600 text-zinc-400 hover:text-black w-24" onClick={() => onConfirm()} disabled={!enabled}>
             {{
               pick: 'Lock in',
               ban: 'Ban',

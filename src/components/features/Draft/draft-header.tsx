@@ -21,7 +21,7 @@ export default function DraftHeader({
 
         <div className="flex justify-center items-center w-[20%]">
           <div className="text-white text-4xl font-bold">
-            {timer}
+            {timer && timer >= 0 ? timer : 0}
           </div>
         </div>
 

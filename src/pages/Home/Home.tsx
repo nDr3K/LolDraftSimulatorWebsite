@@ -1,11 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import OptionsAccordion from "@/components/features/Home/options-accordion";
+import ChampionService from '@/services/champions.service';
 import { useLobbyService } from "@/services/lobby/lobby-utils";
 import { LobbyOptions } from "@/types/draft-options";
 import { CreateLobbyResponse } from "@/services/lobby/model/create-lobby-response";
 import LobbyDialog from "@/components/features/Home/lobby-dialog";
+import { DraftChampion } from "@/types/draft-champion";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -18,6 +20,8 @@ export default function Home() {
     hasTimer: false,
   });
   const [lobby, setLobby] = useState<CreateLobbyResponse | null>(null);
+  const [champions, setChampions] = useState<Array<DraftChampion>>([]);
+  const [disabledChampions, setDisabledChampions] = useState<Set<string>>(new Set([]));
   const { createLobby } = useLobbyService();
   
   const handleCardClick = async (mode: 'solo' | 'multiplayer') => {
@@ -39,7 +43,8 @@ export default function Home() {
             keepBan: draftOptions.isFearless && draftOptions.fearlessMode == 'hardcore',
             tournamentBan: draftOptions.tournamentBan,
             hasTimer: draftOptions.hasTimer
-          }
+          },
+          champions: champions
         });
         
         setLobby(lobbyResponse);
@@ -48,6 +53,26 @@ export default function Home() {
       }
     }
   };
+
+  useEffect(() => {
+    const loadChampions = async () => {
+      try {
+        await ChampionService.fetchLatestVersion();
+        const championsData = await ChampionService.fetchChampions();
+        const champions = ChampionService.transformChampions(
+          championsData,
+          disabledChampions,
+          null,
+          null
+        );
+        setChampions(champions)
+      } catch (err) {
+        console.error('Error fetching champion data:', err);
+      }
+    };
+
+    loadChampions();
+}, [disabledChampions]);
 
   return (
     <>
