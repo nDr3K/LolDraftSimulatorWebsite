@@ -6,6 +6,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Button } from "@/components/ui/button"
 import { CreateLobbyResponse } from '@/services/lobby/model/create-lobby-response'
 import LobbyUrlButton from './lobby-url-button';
+import { useToast } from '@/hooks/use-toast';
 
 export default function LobbyDialog({ 
   lobby,
@@ -22,14 +23,15 @@ export default function LobbyDialog({
       };
     }
   };
+  const { toast } = useToast()
 
   const copyAllUrls = () => {
-    const blueTeamLink = `Blue Team: ${lobby.blueTeamUrl}`;
-    const redTeamLink = `Red Team: ${lobby.redTeamUrl}`;
-    const spectatorsLink = `Spectators: ${lobby.spectatorUrl}`;
+    const blueTeamLink = `Blue Team: ${window.location.host}${lobby.blueTeamUrl}`;
+    const redTeamLink = `Red Team: ${window.location.host}${lobby.redTeamUrl}`;
+    const spectatorsLink = `Spectators: ${window.location.host}${lobby.spectatorUrl}`;
     const formattedText = [blueTeamLink, redTeamLink, spectatorsLink].join('\n');
     navigator.clipboard.writeText(formattedText).then(() => {
-      alert('All URLs copied to clipboard!')
+      toast({description:'All URLs copied to clipboard!'})
     }).catch(err => {
       console.error('Failed to copy text: ', err);
     })
@@ -41,9 +43,9 @@ export default function LobbyDialog({
         setIsOpen(open)
         onClose()
       }}}>
-      <DialogContent className="sm:max-w-[600px]" onClose={onClose}>
+      <DialogContent className="sm:max-w-[650px]" onClose={onClose}>
         <DialogHeader>
-          <DialogTitle>Important URLs</DialogTitle>
+          <DialogTitle>Lobby URLs</DialogTitle>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <LobbyUrlButton
