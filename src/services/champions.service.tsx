@@ -10,13 +10,18 @@ interface IChampionService {
 class ChampionService implements IChampionService {
   version: string | null;
   roles: RolesData | null;
+  champions: Record<string, DataChampion> | null;
 
   constructor() {
     this.version = null;
     this.roles = null;
+    this.champions = null;
   }
 
   async fetchLatestVersion(): Promise<string> {
+    if (this.version) {
+      return this.version;
+    }
     const versionsResponse = await fetch('https://ddragon.leagueoflegends.com/api/versions.json');
     if (!versionsResponse.ok) {
       throw new Error('Failed to fetch versions');
@@ -30,6 +35,9 @@ class ChampionService implements IChampionService {
   }
 
   async fetchChampions(): Promise<Record<string, DataChampion>> {
+    if (this.champions) {
+      return this.champions;
+    }
     if (!this.version) {
       throw new Error('Version not set. Call fetchLatestVersion() first.');
     }
@@ -41,18 +49,23 @@ class ChampionService implements IChampionService {
     }
     await this.fetchRolesData();
     const championsData = await championsResponse.json();
-    return championsData.data as Record<string, DataChampion>;
+    this.champions = championsData.data as Record<string, DataChampion>;
+    return this.champions;
   }
 
   async fetchRolesData() {
-    const rolesResponse = await fetch(
-      "http://localhost:8080/proxy/championrates"
-    );
-    if (!rolesResponse.ok) {
-      throw new Error('Failed to fetch roles')
+    try {
+      const rolesResponse = await fetch(
+        "http://localhost:8080/proxy/championrates"
+      );
+      if (!rolesResponse.ok) {
+        throw new Error('Failed to fetch roles')
+      }
+      const rolesData = await rolesResponse.json();
+      this.roles = rolesData as RolesData;
+    } catch(err) {
+      // TODO: remove role filter
     }
-    const rolesData = await rolesResponse.json();
-    this.roles = rolesData as RolesData;
   }
 
   transformChampions(
