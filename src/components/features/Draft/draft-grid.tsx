@@ -49,7 +49,7 @@ export default function DraftGrid({
           )}>
             <img
               src={champion.id == 'none' 
-                ? '/src/assets/placeholder.png' 
+                ? '/assets/placeholder.png' 
                 : `https://ddragon.leagueoflegends.com/cdn/${version}/img/champion/${champion.id}.png`
               }
               alt={champion.name}

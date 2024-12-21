@@ -26,7 +26,7 @@ export default function DraftDisabled({
               className="w-full h-full object-cover grayscale"
               src={
                 ban == null
-                  ? 'src/assets/placeholder.png'
+                  ? '/assets/placeholder.png'
                   : `https://ddragon.leagueoflegends.com/cdn/${version}/img/champion/${ban}.png`
               }
               alt={ban || 'placeholder'}

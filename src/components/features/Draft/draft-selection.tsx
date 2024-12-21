@@ -38,7 +38,7 @@ export default function DraftSelection({
             }`}
           >
             <img
-              src={`/src/assets/position-${role}.png`}
+              src={`/assets/position-${role}.png`}
               alt={`${role} position`}
             />
           </div>
