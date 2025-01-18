@@ -1,0 +1,13 @@
+version: "3.8"
+
+services:
+  fearlessdraft-app:
+    image: ndrek/fearlessdraft-app:${IMAGE_TAG}
+    deploy:
+      replicas: 2
+      update_config:
+        parallelism: 1
+        delay: 30s
+        order: start-first
+      restart_policy:
+        condition: any
