@@ -44,4 +44,4 @@ jobs:
           script: |
             cd deployment/fearlessdraft-app
             export IMAGE_TAG=${{ github.sha }}
-            docker stack deploy -c docker-compose.yml fearlessdraft-app
+            docker stack deploy -c docker-stack.yml fearlessdraft-app
