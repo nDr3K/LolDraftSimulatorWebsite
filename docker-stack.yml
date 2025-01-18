@@ -11,3 +11,5 @@ services:
         order: start-first
       restart_policy:
         condition: any
+    ports:
+      - "8080:80"
