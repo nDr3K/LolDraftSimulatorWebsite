@@ -40,7 +40,7 @@ jobs:
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USERNAME }}
-          key: ${{ secrets.VPS_PRIVATE_KEY }}
+          key: ${{ secrets.VPS_SSH_KEY }}
           script: |
             cd deployment/fearlessdraft-app
             export IMAGE_TAG=${{ github.sha }}
