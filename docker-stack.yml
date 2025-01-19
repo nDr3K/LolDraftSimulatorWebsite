@@ -32,4 +32,4 @@ networks:
 
 configs:
   nginx_config:
-    file: ./deployment/fearlessdraft-app/nginx.conf
+    file: ./nginx.conf
