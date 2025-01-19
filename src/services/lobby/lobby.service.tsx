@@ -23,7 +23,7 @@ export class LobbyServiceImpl implements LobbyService {
 
       return await response.json();
     } catch (error) {
-      console.error('Lobby creation failed:', error);
+      // console.error('Lobby creation failed:', error);
       throw error;
     }
   }

@@ -10,9 +10,9 @@ export class MultiplayerDraftService implements DraftService {
     const wsUrl = `/ws/lobby/${gameId}/${role}`;
     this.ws = new WebSocket(wsUrl);
 
-    this.ws.onopen = () => {
-      console.log("WebSocket connection established.");
-    };
+    // this.ws.onopen = () => {
+    //   console.log("WebSocket connection established.");
+    // };
 
     this.ws.onmessage = (message) => {
       if (message.data) {
@@ -21,13 +21,13 @@ export class MultiplayerDraftService implements DraftService {
       }
     };
 
-    this.ws.onclose = () => {
-      console.log("WebSocket connection closed.");
-    };
+    // this.ws.onclose = () => {
+    //   console.log("WebSocket connection closed.");
+    // };
 
-    this.ws.onerror = (error) => {
-      console.error("WebSocket error:", error);
-    };
+    // this.ws.onerror = (error) => {
+    //   console.error("WebSocket error:", error);
+    // };
   }
 
   sendEvent(event: DraftEvent): Promise<void> {

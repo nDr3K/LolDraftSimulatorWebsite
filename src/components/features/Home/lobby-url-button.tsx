@@ -15,7 +15,7 @@ const LobbyUrlButton: React.FC<LobbyUrlButtonProps> = ({ label, url, className, 
     navigator.clipboard.writeText(`${window.location.host}${url}`).then(() => {
       toast({description:'URL copied to clipboard!'})
     }).catch(err => {
-      console.error('Failed to copy text: ', err);
+      // console.error('Failed to copy text: ', err);
     })
   }
 

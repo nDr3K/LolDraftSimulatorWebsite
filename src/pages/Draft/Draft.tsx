@@ -135,7 +135,7 @@ export default function Draft() {
 
         setChampions(transformedChampions);
       } catch (err) {
-        console.error('Error fetching champion data:', err);
+        // console.error('Error fetching champion data:', err);
       }
     };
 

@@ -33,7 +33,7 @@ export default function LobbyDialog({
     navigator.clipboard.writeText(formattedText).then(() => {
       toast({description:'All URLs copied to clipboard!'})
     }).catch(err => {
-      console.error('Failed to copy text: ', err);
+      // console.error('Failed to copy text: ', err);
     })
   }
 

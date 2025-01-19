@@ -50,7 +50,7 @@ export default function Home() {
         
         setLobby(lobbyResponse);
       } catch(error) {
-        console.error('Failed to create lobby', error);
+        // console.error('Failed to create lobby', error);
       }
     }
   };
@@ -68,7 +68,7 @@ export default function Home() {
         );
         setChampions(champions)
       } catch (err) {
-        console.error('Error fetching champion data:', err);
+        // console.error('Error fetching champion data:', err);
       }
     };
 
