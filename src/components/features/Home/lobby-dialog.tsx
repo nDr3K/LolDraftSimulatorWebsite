@@ -32,7 +32,7 @@ export default function LobbyDialog({
     const formattedText = [blueTeamLink, redTeamLink, spectatorsLink].join('\n');
     navigator.clipboard.writeText(formattedText).then(() => {
       toast({description:'All URLs copied to clipboard!'})
-    }).catch(err => {
+    }).catch(_ => {
       // console.error('Failed to copy text: ', err);
     })
   }

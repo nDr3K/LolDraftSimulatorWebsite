@@ -106,7 +106,7 @@ export class SoloDraftService implements DraftService {
       );
   
       if (!updated) {
-        console.warn('Unable to hover the champion');
+        // console.warn('Unable to hover the champion');
       }
     }
   
@@ -130,7 +130,7 @@ export class SoloDraftService implements DraftService {
           );
   
       if (!updated) {
-        console.warn(`Unable to ${isBanPhase ? 'ban' : 'select'} the champion`);
+        // console.warn(`Unable to ${isBanPhase ? 'ban' : 'select'} the champion`);
         return;
       }
       this.turnCounter++;
