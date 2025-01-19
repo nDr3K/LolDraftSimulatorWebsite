@@ -22,7 +22,7 @@ services:
       - "80:80"
     configs:
       - source: nginx_config
-      - target: /etc/nginx/nginx.conf
+        target: /etc/nginx/nginx.conf
     networks:
       - app-network
 
@@ -32,4 +32,4 @@ networks:
 
 configs:
   nginx_config:
-    file: nginx.conf
+    file: ./deployment/fearlessdraft-app/nginx.conf
