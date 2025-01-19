@@ -13,3 +13,23 @@ services:
         condition: any
     ports:
       - "3000:80"
+    networks:
+      - app-network
+
+  proxy:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    configs:
+      - source: nginx_config
+      - target: /etc/nginx/nginx.conf
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: overlay
+
+configs:
+  nginx_config:
+    file: nginx.conf

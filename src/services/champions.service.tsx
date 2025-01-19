@@ -56,7 +56,7 @@ class ChampionService implements IChampionService {
   async fetchRolesData() {
     try {
       const rolesResponse = await fetch(
-        "http://localhost:8080/proxy/championrates"
+        "/proxy/championrates"
       );
       if (!rolesResponse.ok) {
         throw new Error('Failed to fetch roles')

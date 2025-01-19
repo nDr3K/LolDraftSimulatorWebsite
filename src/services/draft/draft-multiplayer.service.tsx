@@ -7,7 +7,7 @@ export class MultiplayerDraftService implements DraftService {
   private subscribers: Array<(state: DraftState) => void> = [];
 
   constructor(gameId: string, role: string) {
-    const wsUrl = `ws://localhost:8080/ws/lobby/${gameId}/${role}`;
+    const wsUrl = `/ws/lobby/${gameId}/${role}`;
     this.ws = new WebSocket(wsUrl);
 
     this.ws.onopen = () => {

@@ -8,7 +8,7 @@ export interface LobbyService {
 export class LobbyServiceImpl implements LobbyService {
   async createLobby(payload: CreateLobbyPayload): Promise<CreateLobbyResponse> {
     try {
-      const response = await fetch("http://localhost:8080/api/lobby/create", {
+      const response = await fetch("/api/lobby/create", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
