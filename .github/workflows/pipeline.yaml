@@ -23,7 +23,9 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          tags: ndrek/fearlessdraft-app:${{ github.sha }}
+          tags: |
+            ndrek/fearlessdraft-app:${{ github.sha }}
+            ndrek/fearlessdraft-app:latest
           push: true
 
       - name: Copy nginx.conf to VPS
